@@ -11,11 +11,11 @@ export const Header = () => {
                            lg:px-8
                            border-b"
         >
-            <Button size="sm" variant="outline">
+            {/* <Button size="sm" variant="outline">
                 <Menu />
-            </Button>
+            </Button> */}
             <h2 className="text-2xl font-bold">ShareHub</h2>
-            <div className="flex items-center justify-around">
+            <div className="flex items-center justify-between w-20">
                 <ModeToggle />
                 <UserButton />
             </div>
