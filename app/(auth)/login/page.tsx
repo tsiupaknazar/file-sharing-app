@@ -1,14 +1,23 @@
-import { SignIn } from "@clerk/nextjs";
-import Image from "next/image";
+"use client";
+import useAuth from "@/context/useAuth";
+import { useRouter } from "next/navigation";
+import React from "react";
+import Login from "../_components/login";
 
-export default function Page() {
+const LoginPage = () => {
+  const router = useRouter();
+  const { authStatus } = useAuth();
+
+  if (authStatus) {
+    router.replace("/");
+    return <></>;
+  }
+
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
-          <img
-            alt="Night"
-            src="/AuthImage.jpg"
+        <section className="relative flex h-32 items-end dark:bg-[#1F1F1F] lg:col-span-5 lg:h-full xl:col-span-6">
+          <div
             className="absolute inset-0 h-full w-full object-cover opacity-80"
           />
 
@@ -17,17 +26,17 @@ export default function Page() {
               <h2 className="text-2xl font-bold text-white sm:text-3xl md:text-4xl">
                 Welcome to FileDrop{" "}
               </h2>
-              <Image
+              {/* <Image
                 src="/Logo.png"
                 alt="Logo"
                 height={100}
                 width={100}
                 className="pt-3"
-              />
+              /> */}
             </div>
 
             <p className="mt-4 leading-relaxed text-white/90">
-              {/* {Constant.desc} */}
+              perfect app description
             </p>
           </div>
         </section>
@@ -45,14 +54,17 @@ export default function Page() {
               </h1>
 
               <p className="mt-4 leading-relaxed text-gray-500">
-                {/* {Constant.desc} */}
+                {/* {Constant.desc} */} desc
               </p>
             </div>
 
-            <SignIn />
+            <Login />
           </div>
         </main>
       </div>
     </section>
-  );
+  )
 }
+
+
+export default LoginPage;

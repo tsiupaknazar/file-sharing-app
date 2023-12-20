@@ -3,15 +3,15 @@
 // import { getFiles } from "@/utils/appwrite";
 import { useEffect } from "react";
 
-const MainPage = () => {
+const ProfilePage = () => {
     // useEffect(() => {
     //     getFiles();
     // }, [])
     return (
         <div>
-            main page
+           Profile Page
         </div>
     );
 }
 
-export default MainPage;
+export default ProfilePage;

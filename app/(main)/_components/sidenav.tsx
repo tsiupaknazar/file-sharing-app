@@ -1,8 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-// import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronsRight, ChevronsLeft, Home, Files, Trash, Upload } from "lucide-react";
 
 const menuItems = [
@@ -13,8 +12,15 @@ const menuItems = [
 ];
 
 const SideNav = () => {
-  const [toggleCollapse, setToggleCollapse] = useState(false);
+  const storedCollapseState = localStorage.getItem("sidebarCollapseState");
+  const [toggleCollapse, setToggleCollapse] = useState(
+    storedCollapseState ? JSON.parse(storedCollapseState) : false
+  );
   const [isCollapsible, setIsCollapsible] = useState(true);
+
+  useEffect(() => {
+    localStorage.setItem("sidebarCollapseState", JSON.stringify(toggleCollapse));
+  }, [toggleCollapse]);
 
   const wrapperClasses = cn(
     "h-screen px-4 pt-8 pb-4 bg-light flex justify-between flex-col border border-r-2",
