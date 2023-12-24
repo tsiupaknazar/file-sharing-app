@@ -32,24 +32,12 @@ const Login = () => {
 
     return (
         <div className="flex items-center justify-center w-full text-white">
-            <div className={`mx-auto w-full max-w-lg bg-gray-200/50 rounded-xl p-10`}>
-                <h2 className="text-center text-2xl font-bold leading-tight text-black">
-                    Sign in to your account
-                </h2>
-                <p className="mt-2 text-center text-base text-gray-600">
-                    Don&apos;t have any account?&nbsp;
-                    <Link
-                        href="/signup"
-                        className="font-medium transition-all duration-200 hover:underline"
-                    >
-                        Sign Up
-                    </Link>
-                </p>
+            <div className={`mx-auto w-full max-w-lg rounded-xl p-10`}>
                 {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
                 <form onSubmit={login} className="mt-8">
                     <div className="space-y-5">
                         <div>
-                            <label htmlFor="email" className="text-base font-medium text-gray-900">
+                            <label htmlFor="email" className="text-base font-medium">
                                 Email address
                             </label>
                             <div className="mt-2">
@@ -68,7 +56,7 @@ const Login = () => {
                         </div>
                         <div>
                             <div className="flex items-center justify-between">
-                                <label htmlFor="password" className="text-base font-medium text-gray-900">
+                                <label htmlFor="password" className="text-base font-medium">
                                     Password
                                 </label>
                             </div>

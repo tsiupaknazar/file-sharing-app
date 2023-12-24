@@ -6,12 +6,13 @@ import appwriteService from "@/utils/appwrite";
 import { Models } from "appwrite";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 
 export const Header = () => {
     const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
 
-    const logout = () => {
-        return appwriteService.logout()
+    const toProfile = () => {
+        redirect("/profile")
     }
 
     useEffect(() => {
@@ -31,7 +32,7 @@ export const Header = () => {
             <div className="flex items-center justify-between w-28">
                 <ModeToggle />
                 {/* <Link href="/profile" className="font-bold">{user?.name}</Link> */}
-                <span onClick={logout} className="font-bold cursor-pointer">{user?.name}</span>
+                <span onClick={toProfile} className="font-bold cursor-pointer">{user?.name}</span>
             </div>
         </header>
     )
