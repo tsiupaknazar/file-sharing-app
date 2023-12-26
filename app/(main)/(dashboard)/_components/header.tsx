@@ -11,10 +11,6 @@ import { redirect } from "next/navigation";
 export const Header = () => {
     const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
 
-    const toProfile = () => {
-        redirect("/profile")
-    }
-
     useEffect(() => {
         (async () => {
             const userData = await appwriteService.getCurrentUser()
@@ -32,7 +28,7 @@ export const Header = () => {
             <div className="flex items-center justify-between w-28">
                 <ModeToggle />
                 {/* <Link href="/profile" className="font-bold">{user?.name}</Link> */}
-                <span onClick={toProfile} className="font-bold cursor-pointer">{user?.name}</span>
+                <span className="font-bold cursor-pointer">{user?.name}</span>
             </div>
         </header>
     )

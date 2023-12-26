@@ -3,12 +3,13 @@
 import { cn } from "@/lib/utils";
 import React, { useState, useEffect } from "react";
 import { ChevronsRight, ChevronsLeft, Home, Files, Trash, Upload } from "lucide-react";
+import Link from "next/link";
 
 const menuItems = [
   { id: 1, label: "Home", icon: Home, link: "/" },
-  { id: 2, label: "Upload", icon: Upload, link: "/" },
+  { id: 2, label: "Upload", icon: Upload, link: "/upload" },
   { id: 3, label: "Your Files", icon: Files, link: "/" },
-  { id: 4, label: "Trash", icon: Trash, link: "/" },
+  { id: 4, label: "Trash", icon: Trash, link: "/trash" },
 ];
 
 const SideNav = () => {
@@ -48,8 +49,8 @@ const SideNav = () => {
   return (
     <div
       className={wrapperClasses}
-      onMouseEnter={onMouseOver}
-      onMouseLeave={onMouseOver}
+      // onMouseEnter={onMouseOver}
+      // onMouseLeave={onMouseOver}
       style={{ transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s" }}
     >
       <div className="flex flex-col">
@@ -67,7 +68,7 @@ const SideNav = () => {
         <div className="flex flex-col items-start mt-24">
           {menuItems.map(({ icon: Icon, ...menu }, idx) => (
             <div key={idx}>
-              <a href={menu.link} className="flex py-6 px-3 items-center w-full h-full">
+              <Link href={menu.link} className="flex py-6 px-3 items-center w-full h-full">
                 <div style={{ width: "2.5rem" }}>
                   <Icon />
                 </div>
@@ -76,7 +77,7 @@ const SideNav = () => {
                     {menu.label}
                   </span>
                 )}
-              </a>
+              </Link>
             </div>
           ))}
         </div>
