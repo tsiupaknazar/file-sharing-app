@@ -1,7 +1,6 @@
 import { Client, Account, ID, Storage } from 'appwrite'
 import conf from './config'
-import { FileArray } from './fileArray'
-import { Files } from 'lucide-react'
+// import { FileArray } from './fileArray'
 
 type CreateUserAccount = {
     email: string,
@@ -95,6 +94,22 @@ export class AppwriteService {
             return files;
         } catch (error) {
             console.error('Error:', error);
+        }
+    }
+    async uploadFileToStorage(file: File): Promise<any> {
+        try {
+            const fileId = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID;
+            // Upload the file
+            const uploadResponse = await storage.createFile(
+                fileId, // Bucket ID
+                file.name, // File ID (you can customize this)
+                file // The actual File object
+            );
+            console.log('File uploaded to Appwrite Storage:', uploadResponse);
+            return uploadResponse;
+        } catch (error) {
+            console.error('Error uploading file to storage:', error);
+            throw error; // Rethrow the error for the component to handle
         }
     }
 }

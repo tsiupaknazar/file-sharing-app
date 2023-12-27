@@ -3,12 +3,12 @@ import appwriteService from "@/utils/appwrite";
 import useAuth from "@/context/useAuth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, {FormEvent, useState} from "react";
+import React, { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const Login = () => {
     const router = useRouter()
-    const {setAuthStatus} = useAuth()
+    const { setAuthStatus } = useAuth()
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -23,8 +23,8 @@ const Login = () => {
                 setAuthStatus(true)
                 router.push("/profile")
             }
-                
-            
+
+
         } catch (error: any) {
             setError(error.message)
         }
