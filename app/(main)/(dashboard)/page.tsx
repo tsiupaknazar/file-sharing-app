@@ -48,10 +48,10 @@ const MainPage = () => {
         fetchData();
     }, []);
     return (
-        <div>
+        <div className="mt-4 mx-auto w-[95%]">
             {error && <p>Error: {error.message}</p>}
             {files.length > 0 ? (
-                <ul className="flex items-center flex-col">
+                <ul className="grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
                     {files.map((file) => (
                         <li key={file.$id}>
                             <File file={file} />
