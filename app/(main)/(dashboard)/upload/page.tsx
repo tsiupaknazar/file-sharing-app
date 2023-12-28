@@ -33,7 +33,7 @@ export default function UploadPage() {
         }
     };
     return (
-        <div className="flex flex-col items-center justify-center mt-8">
+        <div className="flex flex-col items-center justify-center mt-8 ">
             <div
                 {...getRootProps()}
                 className="w-64 h-32 p-6 border-4 border-dashed rounded-md cursor-pointer"

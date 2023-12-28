@@ -24,7 +24,7 @@ export const Header = () => {
                            lg:px-8
                            border-b"
         >
-            <Link href="/" className="text-2xl font-bold">ShareHub</Link>
+            <Link href="/" className="text-2xl font-bold">EasyShare</Link>
             <div className="flex items-center justify-between w-28">
                 <ModeToggle />
                 {/* <Link href="/profile" className="font-bold">{user?.name}</Link> */}

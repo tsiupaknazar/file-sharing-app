@@ -19,6 +19,7 @@ appwriteClient.setEndpoint(conf.appwriteUrl).setProject(conf.appwriteProjectId);
 
 export const account = new Account(appwriteClient)
 const storage = new Storage(appwriteClient);
+const bucketID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID;
 
 export class AppwriteService {
     //create a new record of user inside appwrite
@@ -69,19 +70,12 @@ export class AppwriteService {
             console.log("logout error: " + error)
         }
     }
-    // async getFiles(): Promise<{ files: FileArray } | undefined> {
-    //     try {
-    //         const response = await storage.listFiles('6581b3bdc170dd95ff6e');
-    //         return { files: response };
-    //     } catch (error) {
-    //         console.error('Error fetching files:', error);
-    //         return undefined;
-    //     }
-    // }
     async getFilesFromStorage(): Promise<any> {
         try {
-            const fileId = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID;
-            const response = await storage.listFiles(fileId);
+            if (!bucketID) {
+                throw new Error('Bucket ID is undefined');
+            }
+            const response = await storage.listFiles(bucketID);
             const files = response.files;
             if (files.length > 0) {
                 console.log('Files in the collection:');
@@ -98,20 +92,73 @@ export class AppwriteService {
     }
     async uploadFileToStorage(file: File): Promise<any> {
         try {
-            const fileId = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID;
-            // Upload the file
+            if (!bucketID) {
+                throw new Error('Bucket ID is undefined');
+            }
             const uploadResponse = await storage.createFile(
-                fileId, // Bucket ID
-                file.name, // File ID (you can customize this)
-                file // The actual File object
+                bucketID,
+                file.name,
+                file
             );
             console.log('File uploaded to Appwrite Storage:', uploadResponse);
             return uploadResponse;
         } catch (error) {
             console.error('Error uploading file to storage:', error);
-            throw error; // Rethrow the error for the component to handle
+            throw error;
         }
     }
+    async downloadFileFromStorage(fileId: string): Promise<Blob> {
+        try {
+            if (!bucketID) {
+                throw new Error('Bucket ID is undefined');
+            }
+
+            const response = await storage.getFileDownload(bucketID, fileId);
+
+            if (response instanceof URL) {
+                const blob = await fetch(response.toString()).then((res) => res.blob());
+                return blob;
+            } else {
+                throw new Error('Unexpected response type');
+            }
+        } catch (error) {
+            console.error('Error downloading file from storage:', error);
+            throw error;
+        }
+    }
+
+    async deleteFileFromStorage(fileId: string) {
+        try {
+            if (!bucketID) {
+                throw new Error('Bucket ID is undefined');
+            }
+            await storage.deleteFile(bucketID, fileId);
+            console.log('File deleted from storage:', fileId);
+        } catch (error) {
+            console.error('Error deleting file from storage:', error);
+            throw error;
+        }
+    }
+    async getFilePreviewFromStorage(fileId: string): Promise<Blob> {
+        try {
+            if (!bucketID) {
+                throw new Error('Bucket ID is undefined');
+            }
+
+            const response = await storage.getFilePreview(bucketID, fileId);
+
+            if (response instanceof URL) {
+                const blob = await fetch(response.toString()).then((res) => res.blob());
+                return blob;
+            } else {
+                throw new Error('Unexpected response type');
+            }
+        } catch (error) {
+            console.error('Error downloading file preview from storage:', error);
+            throw error;
+        }
+    }
+
 }
 
 const appwriteService = new AppwriteService()

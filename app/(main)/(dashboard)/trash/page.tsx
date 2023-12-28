@@ -3,7 +3,7 @@
 export default function TrashPage() {
     return (
         <div>
-            Trash Page
+            Trash page content
         </div>
     )
 }

@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
-
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const Signup = () => {
     const router = useRouter()
@@ -25,7 +26,7 @@ const Signup = () => {
             const userData = await appwriteService.createUserAccount(formData);
             if (userData) {
                 setAuthStatus(true)
-                router.push("/profile")
+                router.push("/")
             }
         } catch (error: any) {
             setError(error.message)
@@ -39,12 +40,11 @@ const Signup = () => {
                 <form onSubmit={create} className="mt-8">
                     <div className="space-y-5">
                         <div>
-                            <label htmlFor="name" className="text-base font-medium">
+                            <Label htmlFor="name">
                                 Full Name
-                            </label>
+                            </Label>
                             <div className="mt-2">
-                                <input
-                                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                <Input
                                     type="text"
                                     placeholder="Full Name"
                                     id="name"
@@ -57,12 +57,11 @@ const Signup = () => {
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="email" className="text-base font-medium">
+                            <Label htmlFor="email">
                                 Email address
-                            </label>
+                            </Label>
                             <div className="mt-2">
-                                <input
-                                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                <Input
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) =>
@@ -76,13 +75,12 @@ const Signup = () => {
                         </div>
                         <div>
                             <div className="flex items-center justify-between">
-                                <label htmlFor="password" className="text-base font-medium">
+                                <Label htmlFor="password">
                                     Password
-                                </label>
+                                </Label>
                             </div>
                             <div className="mt-2">
-                                <input
-                                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                <Input
                                     type="password"
                                     placeholder="Password"
                                     value={formData.password}
