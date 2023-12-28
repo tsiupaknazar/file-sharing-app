@@ -1,6 +1,7 @@
 import { getIconForMimeType } from "@/utils/mimeTypeToIcon";
 import Image from "next/image";
 import { MoreVertical } from "lucide-react";
+import appwriteService from "@/utils/appwrite";
 
 interface IFile {
   $id: string;
@@ -26,7 +27,7 @@ export const File = ({ file }: IFileComponentProps) => {
             ? file.name.slice(0, 15) + "..."
             : file.name}
         </span>
-        <MoreVertical />
+        <MoreVertical onClick={() => appwriteService.deleteFileFromStorage(file.$id)} />
       </div>
       <figure className="w-full aspect-square p-4">
         <Image

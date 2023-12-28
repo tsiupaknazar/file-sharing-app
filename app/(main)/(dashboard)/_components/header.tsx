@@ -1,7 +1,11 @@
 "use client";
 
 import { ModeToggle } from "@/components/mode-toggle";
-
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar"
 import appwriteService from "@/utils/appwrite";
 import { Models } from "appwrite";
 import Link from "next/link";
@@ -10,6 +14,17 @@ import { redirect } from "next/navigation";
 
 export const Header = () => {
     const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+
+    const getInitials = (username: string | undefined): string => {
+        if (username === undefined) {
+            return '';
+        }
+
+        const words = username.split(' ');
+        const initials = words.map(word => word.charAt(0).toUpperCase());
+
+        return initials.length === 1 ? initials[0] : initials.slice(0, 2).join('');
+    }
 
     useEffect(() => {
         (async () => {
@@ -27,8 +42,10 @@ export const Header = () => {
             <Link href="/" className="text-2xl font-bold">EasyShare</Link>
             <div className="flex items-center justify-between w-28">
                 <ModeToggle />
-                {/* <Link href="/profile" className="font-bold">{user?.name}</Link> */}
-                <span className="font-bold cursor-pointer">{user?.name}</span>
+                <Avatar>
+                    {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+                    <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
+                </Avatar>
             </div>
         </header>
     )

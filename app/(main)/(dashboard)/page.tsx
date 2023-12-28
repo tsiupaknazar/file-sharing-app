@@ -46,7 +46,7 @@ const MainPage = () => {
         }
 
         fetchData();
-    }, []);
+    }, [files]);
     return (
         <div className="mt-4 mx-auto w-[95%]">
             {error && <p>Error: {error.message}</p>}
