@@ -93,17 +93,18 @@ export class AppwriteService {
     async uploadFileToStorage(file: File): Promise<any> {
         try {
             if (!bucketID) {
-                throw new Error('Bucket ID is undefined');
+                throw new Error("Bucket ID is undefined");
             }
+
             const uploadResponse = await storage.createFile(
                 bucketID,
                 file.name,
                 file
             );
-            console.log('File uploaded to Appwrite Storage:', uploadResponse);
+            console.log("File uploaded to Appwrite Storage:", uploadResponse);
             return uploadResponse;
         } catch (error) {
-            console.error('Error uploading file to storage:', error);
+            console.error("Error uploading file to storage:", error);
             throw error;
         }
     }
