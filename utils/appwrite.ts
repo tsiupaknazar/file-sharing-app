@@ -70,6 +70,22 @@ export class AppwriteService {
             console.log("logout error: " + error)
         }
     }
+
+    async renameUser(name: string) {
+        try {
+            const user = await this.getCurrentUser();
+            if (user) {
+                const updateUser = await account.updateName(name)
+                if (updateUser) {
+                    return updateUser
+                }
+            }
+        } catch (error) {
+            console.log("renameUser error: " + error)
+        }
+        return null
+    }
+
     async getFilesFromStorage(): Promise<any> {
         try {
             if (!bucketID) {

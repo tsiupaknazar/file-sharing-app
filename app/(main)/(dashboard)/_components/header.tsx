@@ -2,15 +2,22 @@
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/spinner";
 import appwriteService from "@/utils/appwrite";
 import { Models } from "appwrite";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { Pencil } from "lucide-react"
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
+    const router = useRouter()
     const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
         null
     );
@@ -26,6 +33,12 @@ export const Header = () => {
 
         return initials.length === 1 ? initials[0] : initials.slice(0, 2).join("");
     };
+
+    const logOut = () => {
+        router.push("/login");
+        appwriteService.logout();
+        setUser(null);
+    }
 
     useEffect(() => {
         (async () => {
@@ -52,9 +65,36 @@ export const Header = () => {
                     <Spinner size="lg" />
                 )}
                 {!isLoading && (
-                    <Avatar>
-                        <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
-                    </Avatar>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Avatar className="cursor-pointer">
+                                <AvatarFallback>
+                                    <span className="text-xl">
+                                        {user?.name.charAt(0).toUpperCase()}
+                                    </span>
+                                </AvatarFallback>
+                            </Avatar>
+                        </PopoverTrigger>
+                        <PopoverContent className="flex flex-col items-center justify-center gap-4 mr-4">
+                            <div className="relative">
+                                <Avatar className="w-20 h-20 ">
+                                    <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
+                                </Avatar>
+                                <Button
+                                    size={"icon"}
+                                    variant={"outline"}
+                                    className="absolute -bottom-1 -right-1 rounded-full p-0 w-8 h-8"
+                                >
+                                    {/* <Pencil size={16} onClick={} /> */}
+                                </Button>
+                            </div>
+                            <div className="text-center">
+                                <h5 className="font-medium text-2xl">{user?.name}</h5>
+                                <h6 className="">{user?.email}</h6>
+                            </div>
+                            <Button onClick={logOut}>Log out</Button>
+                        </PopoverContent>
+                    </Popover>
                 )}
             </div>
         </div>

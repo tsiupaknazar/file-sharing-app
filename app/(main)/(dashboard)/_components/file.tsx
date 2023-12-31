@@ -1,7 +1,42 @@
 import { getIconForMimeType } from "@/utils/mimeTypeToIcon";
 import Image from "next/image";
-import { MoreVertical } from "lucide-react";
+import {
+  MoreVertical,
+  Cloud,
+  CreditCard,
+  Download,
+  FileSignature,
+  Github,
+  Keyboard,
+  LifeBuoy,
+  LogOut,
+  Mail,
+  MessageSquare,
+  Plus,
+  PlusCircle,
+  Trash,
+  Settings,
+  Share,
+  User,
+  UserPlus,
+  Users
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import appwriteService from "@/utils/appwrite";
+import { Button } from "@/components/ui/button";
 
 interface IFile {
   $id: string;
@@ -27,7 +62,29 @@ export const File = ({ file }: IFileComponentProps) => {
             ? file.name.slice(0, 15) + "..."
             : file.name}
         </span>
-        <MoreVertical onClick={() => appwriteService.deleteFileFromStorage(file.$id)} />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <MoreVertical />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuItem>
+              <FileSignature className="mr-2 h-4 w-4" />
+              <span>Rename</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Download className="mr-2 h-4 w-4" />
+              <span>Download</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Share className="mr-2 h-4 w-4" />
+              <span>Share</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => appwriteService.deleteFileFromStorage(file.$id)}>
+              <Trash className="mr-2 h-4 w-4" />
+              <span>Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <figure className="w-full aspect-square p-4">
         <Image
