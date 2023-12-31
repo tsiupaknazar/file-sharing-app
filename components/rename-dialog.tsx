@@ -11,28 +11,25 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 
-export const RenameDialog = () => {
+type RenameDialogProps = {
+    setOpen: React.SetStateAction<boolean>
+}
+
+export const RenameDialog = ({setOpen}: RenameDialogProps) => {
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button variant="ghost" size="sm">
-                    {/* <Pencil /> */}Pencil
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>Rename</DialogHeader>
-                <DialogTitle>Rename</DialogTitle>
-                <DialogDescription>
-                    <Label>Name</Label>
-                    <Input placeholder="Name" />
-                </DialogDescription>
-            </DialogContent>
+        <DialogContent>
+            <DialogHeader>Rename</DialogHeader>
+            <DialogTitle>Rename</DialogTitle>
+            <DialogDescription>
+                <Label>Name</Label>
+                <Input placeholder="Name" />
+            </DialogDescription>
             <DialogFooter>
                 <Button variant="ghost" size="sm">
                     Cancel
                 </Button>
                 <Button size="sm">Save</Button>
             </DialogFooter>
-        </Dialog>
-    )   
+        </DialogContent>
+    )
 }
