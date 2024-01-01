@@ -38,26 +38,6 @@ export default function UploadPage() {
   };
 
   return (
-    // <div className="flex flex-col items-center justify-center mt-8">
-    //   <div
-    //     {...getRootProps()}
-    //     className={`w-96 h-48 p-6 border-4 border-dashed rounded-md cursor-pointer ${uploadError ? 'border-red-500' : ''
-    //       }`}
-    //   >
-    //     <input {...getInputProps()} />
-    //     <p className={`text-center ${uploadError ? 'text-red-500' : 'text-gray-500'}`}>
-    //       {uploadError || (file ? `File: ${file.name}` : 'Drag n drop a file here, or click to select a file')}
-    //     </p>
-    //   </div>
-    //   <button
-    //     onClick={uploadFile}
-    //     disabled={!file}
-    //     className={`mt-4 px-4 py-2 bg-blue-500 text-white rounded ${!file && 'opacity-50 cursor-not-allowed'
-    //       }`}
-    //   >
-    //     Upload
-    //   </button>
-    // </div>
     <main className="p-8" {...getRootProps()}>
       <section className="p-6 border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center gap-4">
         <p className="text-lg font-medium text-gray-500">Drag and drop files here</p>
@@ -81,7 +61,7 @@ export default function UploadPage() {
                 {file ? file.type : 'File Type'}
               </CardDescription>
             </div>
-            <Button className="text-sm" variant="ghost" onClick={uploadFile}>
+            <Button type='button' className="text-sm" variant="ghost" onClick={uploadFile}>
               Upload
             </Button>
           </Card>

@@ -99,7 +99,7 @@ export const File = ({ file }: IFileComponentProps) => {
           width={100}
           height={100}
           alt="image"
-          className="w-full h-full object-none bg-white rounded-sm"
+          className="w-full h-full object-none bg-white dark:bg-accent rounded-sm"
         />
       </figure>
     </div>

@@ -96,7 +96,7 @@ export class AppwriteService {
             if (files.length > 0) {
                 console.log('Files in the collection:');
                 files.forEach((file) => {
-                    console.log(`- File ID: ${file.$id}, Filename: ${file.name}`);
+                    console.log(`- File ID: ${file.$id}, Filename: ${file.name}, mimeType: ${file.mimeType}`);
                 });
             } else {
                 console.log('No files found in the collection.');

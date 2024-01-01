@@ -8,9 +8,13 @@ export const getIconForMimeType = (mimeType: string): string => {
             return '/JAVA.png';
         case 'application/xml':
             return '/XML.png';
+        case 'application/zip':
+            return '/ZIP.png';
         case 'image/jpeg':
         case 'image/png':
             return '/JPG.png';
+        case 'image/svg+xml':
+            return '/SVG.png';
         case 'audio/mpeg':
             return '/MPEG.png';
         case 'video/mp4':
@@ -23,6 +27,8 @@ export const getIconForMimeType = (mimeType: string): string => {
         case 'application/vnd.ms-excel':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
             return '/XSL.png';
+        case 'text/x-python-script':
+            return '';
         default:
             return '/other.png';
     }
