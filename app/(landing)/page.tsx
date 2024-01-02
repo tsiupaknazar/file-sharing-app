@@ -26,6 +26,9 @@ const AuthPage = () => {
                             </Button>
                         </SignInButton>
                     </SignedOut>
+                    <SignedIn>
+                        <Button size="sm">To Dashboard</Button>
+                    </SignedIn>
                 </div>
             </header>
             <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
