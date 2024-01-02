@@ -26,8 +26,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 
-import appwriteService from "@/utils/appwrite";
-
 interface IFile {
   $id: string;
   name: string;
@@ -86,7 +84,7 @@ export const File = ({ file }: IFileComponentProps) => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => appwriteService.deleteFileFromStorage(file.$id)}>Delete</AlertDialogAction>
+                  <AlertDialogAction>Delete</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </DropdownMenuContent>

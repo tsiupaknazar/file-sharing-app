@@ -24,7 +24,7 @@ export const Header = () => {
                     <Spinner size="lg" />
                 )}
                 {!isLoading && (
-                    <UserButton afterSignOutUrl="/auth" />
+                    <UserButton afterSignOutUrl="/" />
                 )}
             </div>
         </div>

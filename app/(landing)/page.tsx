@@ -10,7 +10,7 @@ import {
 const AuthPage = () => {
     return (
         <div className="mt-4 mx-auto w-[95%]">
-            <h1 className="font-bold">Auth Page</h1>
+            <h1 className="font-bold">Welcome to EasyShare</h1>
             <SignedIn>
                 <UserButton />
             </SignedIn>
