@@ -1,5 +1,4 @@
 "use client";
-import appwriteService from "@/utils/appwrite";
 import { useEffect, useState } from "react";
 import { File } from "./_components/file";
 
@@ -18,11 +17,11 @@ interface FileData {
 }
 
 type FileArray = FileData[]
-const MainPage = () => {
+const DashboardPage = () => {
   const [files, setFiles] = useState<FileData[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  // useEffect(() => {
     // appwriteService.getFiles()
     //   .then(response => {
     //     if (response && response.files) {
@@ -35,23 +34,24 @@ const MainPage = () => {
     //     console.error('Error fetching files:', error);
     //     setError('Error fetching files: ' + error);
     //   });
-    async function fetchData() {
-      try {
-        const response = await appwriteService.getFilesFromStorage();
-        setFiles(response || []);
-      } catch (error) {
-        // setError(error);
-        console.error("Error:", error);
-      }
-    }
+  //   async function fetchData() {
+  //     try {
+  //       const response = await appwriteService.getFilesFromStorage();
+  //       setFiles(response || []);
+  //     } catch (error) {
+  //       // setError(error);
+  //       console.error("Error:", error);
+  //     }
+  //   }
 
-    fetchData();
-  }, [files]);
+  //   fetchData();
+  // }, [files]);
 
   return (
     <div className="mt-4 mx-auto w-[95%]">
       {error && <p>Error: {error}</p>}
-      {files.length > 0 ? (
+      <p>Files is temporarily not available</p>
+      {/* {files.length > 0 ? (
         <ul className="grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
           {files.map((file: FileData) => (
             <li key={file.$id}>
@@ -61,9 +61,9 @@ const MainPage = () => {
         </ul>
       ) : (
         <p>No files found in the collection.</p>
-      )}
+      )} */}
     </div>
   );
 };
 
-export default MainPage;
+export default DashboardPage;

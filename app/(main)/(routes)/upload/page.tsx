@@ -1,7 +1,6 @@
 "use client";
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import appwriteService from '@/utils/appwrite';
 import { useToast } from '@/components/ui/use-toast';
 
 import { Button } from "@/components/ui/button"
@@ -21,21 +20,21 @@ export default function UploadPage() {
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  const uploadFile = async () => {
-    if (file) {
-      try {
-        await appwriteService.uploadFileToStorage(file);
-        toast({
-          title: "Success",
-          description: "File uploaded successfully",
-        });
-        setFile(null);
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        setUploadError("Error uploading file. Please try again.");
-      }
-    }
-  };
+  // const uploadFile = async () => {
+  //   if (file) {
+  //     try {
+  //       await appwriteService.uploadFileToStorage(file);
+  //       toast({
+  //         title: "Success",
+  //         description: "File uploaded successfully",
+  //       });
+  //       setFile(null);
+  //     } catch (error) {
+  //       console.error("Error uploading file:", error);
+  //       setUploadError("Error uploading file. Please try again.");
+  //     }
+  //   }
+  // };
 
   return (
     <main className="p-8" {...getRootProps()}>
@@ -61,7 +60,10 @@ export default function UploadPage() {
                 {file ? file.type : 'File Type'}
               </CardDescription>
             </div>
-            <Button type='button' className="text-sm" variant="ghost" onClick={uploadFile}>
+            {/* <Button type='button' className="text-sm" variant="ghost" onClick={uploadFile}>
+              Upload
+            </Button> */}
+            <Button type='button' className="text-sm" variant="ghost">
               Upload
             </Button>
           </Card>

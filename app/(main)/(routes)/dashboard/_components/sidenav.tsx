@@ -6,9 +6,9 @@ import { ChevronsRight, ChevronsLeft, Home, Files, Trash, Upload } from "lucide-
 import Link from "next/link";
 
 const menuItems = [
-  { id: 1, label: "Home", icon: Home, link: "/" },
+  { id: 1, label: "Home", icon: Home, link: "/dashboard" },
   { id: 2, label: "Upload", icon: Upload, link: "/upload" },
-  { id: 3, label: "Your Files", icon: Files, link: "/" },
+  { id: 3, label: "Your Files", icon: Files, link: "/dashboard" },
   { id: 4, label: "Trash", icon: Trash, link: "/trash" },
 ];
 
