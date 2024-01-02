@@ -9,6 +9,7 @@ import {
     UserButton,
 } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 
 const AuthPage = () => {
     return (
@@ -27,7 +28,9 @@ const AuthPage = () => {
                         </SignInButton>
                     </SignedOut>
                     <SignedIn>
-                        <Button size="sm">To Dashboard</Button>
+                        <Link href="/dashboard">
+                            <Button size="sm">To Dashboard</Button>
+                        </Link>
                     </SignedIn>
                 </div>
             </header>
