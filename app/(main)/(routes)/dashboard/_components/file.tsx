@@ -26,22 +26,20 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 
-interface IFile {
-  $id: string;
+interface FileInfo {
   name: string;
-  mimeType: string;
-  // Add other properties as needed
+  type: string;
+  downloadUrl: string;
 }
 
 interface IFileComponentProps {
-  file: IFile;
+  file: FileInfo;
 }
 
 export const File = ({ file }: IFileComponentProps) => {
   return (
     <div
-      key={file.$id}
-      className="bg-accent rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer"
+      className="bg-accent w-96 h-96 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer"
     // onDoubleClick={() => handleFileView(info!)}
     >
       <div className="flex justify-between items-center px-4 h-10">
@@ -91,11 +89,11 @@ export const File = ({ file }: IFileComponentProps) => {
           </DropdownMenu>
         </AlertDialog>
       </div>
-      <figure className="w-full aspect-square p-4">
+      <figure className="h-full aspect-auto p-4">
         <Image
-          src={getIconForMimeType(file.mimeType)}
-          width={100}
-          height={100}
+          src={getIconForMimeType(file.type)}
+          width={80}
+          height={80}
           alt="image"
           className="w-full h-full object-none bg-white dark:bg-accent rounded-sm"
         />

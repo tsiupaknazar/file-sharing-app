@@ -1,7 +1,7 @@
 "use client";
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import FirebaseStorageService from '@/firebase/storageService';
 import { storage } from '@/firebase/firebaseConfig';
 
 import { Button } from "@/components/ui/button"
@@ -20,12 +20,10 @@ export default function UploadPage() {
     if (file) {
       try {
         setUploading(true);
-        const storageRef = ref(storage, `uploads/${file.name}`);
-        await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(storageRef);
+        const url = await FirebaseStorageService.uploadFile(file);
         setDownloadURL(url);
       } catch (error) {
-        console.error("Error uploading file:", error);
+        console.error('Error uploading file:', error);
       } finally {
         setUploading(false);
       }
