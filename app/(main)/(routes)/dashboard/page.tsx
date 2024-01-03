@@ -1,67 +1,61 @@
 "use client";
-import { useEffect, useState } from "react";
-import { File } from "./_components/file";
+import { useState, useEffect } from 'react';
+import { listAll, getDownloadURL, ref, getMetadata } from 'firebase/storage';
+import { storage } from '@/firebase/firebaseConfig';
 
-interface FileData {
-    $createdAt: string;
-    $id: string;
-    $permissions: string[];
-    $updatedAt: string;
-    bucketId: string;
-    chunksTotal: number;
-    chunksUploaded: number;
-    mimeType: string;
-    name: string;
-    signature: string;
-    sizeOriginal: number;
+interface FileInfo {
+  name: string;
+  type: string;
+  downloadUrl: string;
 }
 
-type FileArray = FileData[]
 const DashboardPage = () => {
-  const [files, setFiles] = useState<FileData[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [files, setFiles] = useState<FileInfo[]>([]);
 
-  // useEffect(() => {
-    // appwriteService.getFiles()
-    //   .then(response => {
-    //     if (response && response.files) {
-    //       setFiles(response.files);
-    //     } else {
-    //       setError('Files property not found in the response.');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Error fetching files:', error);
-    //     setError('Error fetching files: ' + error);
-    //   });
-  //   async function fetchData() {
-  //     try {
-  //       const response = await appwriteService.getFilesFromStorage();
-  //       setFiles(response || []);
-  //     } catch (error) {
-  //       // setError(error);
-  //       console.error("Error:", error);
-  //     }
-  //   }
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const filesRef = ref(storage, 'uploads/');
+        const filesList = await listAll(filesRef);
 
-  //   fetchData();
-  // }, [files]);
+        const fileInfos = await Promise.all(
+          filesList.items.map(async (item) => {
+            const downloadUrl = await getDownloadURL(item);
+            const metadata = await getMetadata(item);
+            return {
+              name: item.name,
+              type: metadata.contentType || 'Unknown Type',
+              downloadUrl,
+            };
+          })
+        );
 
+        setFiles(fileInfos);
+      } catch (error) {
+        console.error('Error fetching files:', error);
+      }
+    };
+
+    fetchFiles();
+  }, []);
   return (
     <div className="mt-4 mx-auto w-[95%]">
-      {error && <p>Error: {error}</p>}
-      <p>Files is temporarily not available</p>
-      {/* {files.length > 0 ? (
-        <ul className="grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
-          {files.map((file: FileData) => (
-            <li key={file.$id}>
-              <File file={file} />
+      {files.length > 0 ? (
+        <ul>
+          {files.map((file, index) => (
+            <li key={index}>
+              <p>
+                <strong>Name:</strong> {file.name} | <strong>Type:</strong> {file.type}
+              </p>
+              <a href={file.downloadUrl} target="_blank" rel="noopener noreferrer">
+                Download
+              </a>
             </li>
           ))}
         </ul>
       ) : (
-        <p>No files found in the collection.</p>
-      )} */}
+        <p>No files available.</p>
+      )}
     </div>
   );
 };
