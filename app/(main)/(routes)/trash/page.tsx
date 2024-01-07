@@ -1,9 +1,12 @@
 "use client";
 
+import { TrashList } from "./_components/trashlist";
+
 export default function TrashPage() {
     return (
-        <div>
-            Trash page content
-        </div>
+        <>
+            <h1>Trash Page</h1>
+            <TrashList />
+        </>
     )
 }

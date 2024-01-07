@@ -25,6 +25,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import FirebaseStorageService from "@/firebase/storageService";
+import { useAuth } from "@clerk/nextjs";
 
 interface FileInfo {
   name: string;
@@ -37,6 +39,7 @@ interface IFileComponentProps {
 }
 
 export const File = ({ file }: IFileComponentProps) => {
+  const { userId } = useAuth();
   return (
     <div
       className="bg-accent w-96 h-96 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer"
@@ -89,11 +92,12 @@ export const File = ({ file }: IFileComponentProps) => {
           </DropdownMenu>
         </AlertDialog>
       </div>
-      <figure className="h-full aspect-auto p-4">
+      <figure className="aspect-auto p-4 h-80">
         <Image
           src={getIconForMimeType(file.type)}
-          width={80}
-          height={80}
+          onClick={() => FirebaseStorageService.moveToTrash(userId!, file)}
+          width={85}
+          height={85}
           alt="image"
           className="w-full h-full object-none bg-white dark:bg-accent rounded-sm"
         />

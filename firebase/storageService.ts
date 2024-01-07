@@ -1,14 +1,11 @@
-import { ref, uploadBytes, listAll, getDownloadURL, getMetadata } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject } from 'firebase/storage';
 import { storage } from './firebaseConfig';
-import { useAuth } from "@clerk/nextjs";
 
 export interface FileInfo {
   name: string;
   type: string;
   downloadUrl: string;
 }
-
-// const { userId } = useAuth();
 
 class FirebaseStorageService {
   static async uploadFile(userId: string | null,file: File): Promise < string | null > {
@@ -45,6 +42,36 @@ class FirebaseStorageService {
     return [];
   }
 }
+
+  static async moveToTrash(userId: string | null, fileRef: any) {
+    // TODO: Rewrite this method
+    const trashRef = ref(storage, `${userId}/trash/${fileRef.name}`);
+    await uploadBytes(trashRef, fileRef);
+    await deleteObject(fileRef);
+    return await this.getDownloadUrl(trashRef);
+  }
+
+  static async getTrashFiles(userId: string | null) {
+    const trashRef = ref(storage, `${userId}/trash/`);
+    const trashFiles = await listAll(trashRef);
+
+    return trashFiles.items;
+  }
+
+  static async deleteFromTrash(userId: string | null, fileRef: any) {
+    await deleteObject(fileRef);
+  }
+
+  static async clearTrash(userId: string | null) {
+    const trashRef = ref(storage, `${userId}/trash/`);
+    const trashFiles = await listAll(trashRef);
+
+    await Promise.all(
+      trashFiles.items.map(async (fileRef) => {
+        await deleteObject(fileRef);
+      })
+    );
+  }
 
   private static async getDownloadUrl(storageRef: any): Promise < string > {
   return getDownloadURL(storageRef);
