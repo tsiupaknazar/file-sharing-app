@@ -28,21 +28,15 @@ import { Button } from "@/components/ui/button"
 import FirebaseStorageService from "@/firebase/storageService";
 import { useAuth } from "@clerk/nextjs";
 
-interface FileInfo {
-  name: string;
-  type: string;
-  downloadUrl: string;
-}
-
 interface TrashFileInfo {
   name: string;
 }
 
 interface IFileComponentProps {
-  file: FileInfo ;
+  file: TrashFileInfo;
 }
 
-export const File = ({ file }: IFileComponentProps) => {
+export const TrashFile = ({ file }: IFileComponentProps) => {
   const { userId } = useAuth();
   return (
     <div
@@ -98,7 +92,7 @@ export const File = ({ file }: IFileComponentProps) => {
       </div>
       <figure className="aspect-auto p-4 h-80">
         <Image
-          src={getIconForMimeType(file.type)}
+          src="/other.png"
           onClick={() => FirebaseStorageService.moveToTrash(userId!, file)}
           width={85}
           height={85}

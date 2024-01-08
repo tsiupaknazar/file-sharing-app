@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
-import FirebaseStorageService, { FileInfo } from '@/firebase/storageService';
+import FirebaseStorageService, { FileInfo, TrashFileInfo} from '@/firebase/storageService';
+import { StorageReference } from 'firebase/storage';
 import { Loader } from '@/components/loader';
 import { File } from '../../dashboard/_components/file';
+import { Button } from '@/components/ui/button';
+import { TrashFile } from './trashfile';
 
 export const TrashList = () => {
-    // TODO: Implement this component
     const { userId } = useAuth();
-    const [files, setFiles] = useState<FileInfo[]>([]);
+
+    const [files, setFiles] = useState<TrashFileInfo[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -28,16 +31,25 @@ export const TrashList = () => {
 
     return (
         <>
-            <div className="mt-4 mx-auto w-[95%]">
+            <div className="flex items-center justify-between w-full px-8 py-2">
+                <h1>Trash page</h1>
+                <Button
+                    onClick={() => FirebaseStorageService.clearTrash(userId!)}
+                    disabled={files.length === 0}
+                >
+                    Clear Trash
+                </Button>
+            </div>
+            <div className="mt-8 mx-auto w-[95%]">
                 {loading && <Loader />}
                 {error && <div>{error}</div>}
                 <div className="flex gap-4">
-                    {files.map((file: FileInfo) => (
-                        <File key={file.name} file={file} />
+                    {files.map((file: TrashFileInfo) => (
+                        <TrashFile key={file.name} file={file} />
                     ))}
+                    {files.length === 0 && <div>No files in trash</div>}
                 </div>
             </div>
-            <button className="bg-red-700 w-32 h-12" onClick={() => FirebaseStorageService.clearTrash(userId!)}>Clear Trash</button>
         </>
-    )
+    );
 }
