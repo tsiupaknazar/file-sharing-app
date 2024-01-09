@@ -46,7 +46,7 @@ export const File = ({ file }: IFileComponentProps) => {
   const { userId } = useAuth();
   return (
     <div
-      className="bg-accent w-96 h-96 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer"
+      className="bg-accent w-72 h-72 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer"
     // onDoubleClick={() => handleFileView(info!)}
     >
       <div className="flex justify-between items-center px-4 h-10">
@@ -96,7 +96,7 @@ export const File = ({ file }: IFileComponentProps) => {
           </DropdownMenu>
         </AlertDialog>
       </div>
-      <figure className="aspect-auto p-4 h-80">
+      <figure className="aspect-auto p-4 h-64">
         <Image
           src={getIconForMimeType(file.type)}
           onClick={() => FirebaseStorageService.moveToTrash(userId!, file)}

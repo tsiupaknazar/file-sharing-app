@@ -2,8 +2,7 @@ import { getIconForMimeType } from "@/utils/mimeTypeToIcon";
 import Image from "next/image";
 import {
   MoreVertical,
-  Download,
-  FileSignature,
+  ArchiveRestore,
   Trash,
   Share,
 } from "lucide-react";
@@ -56,16 +55,8 @@ export const TrashFile = ({ file }: IFileComponentProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuItem>
-                <FileSignature className="mr-2 h-4 w-4" />
-                <span>Rename</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Download className="mr-2 h-4 w-4" />
-                <span>Download</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Share className="mr-2 h-4 w-4" />
-                <span>Share</span>
+                <ArchiveRestore className="mr-2 h-4 w-4" />
+                <span>Restore</span>
               </DropdownMenuItem>
               <AlertDialogTrigger asChild>
                 <DropdownMenuItem>

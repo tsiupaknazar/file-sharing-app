@@ -65,6 +65,12 @@ class FirebaseStorageService {
     await deleteObject(fileRef);
   }
 
+  static async restoreFromTrash(userId: string | null, fileRef: any) {
+    const storageRef = ref(storage, `${userId}/uploads/${fileRef.name}`);
+    await uploadBytes(storageRef, fileRef);
+    return deleteObject(fileRef);
+  }
+
   static async clearTrash(userId: string | null) {
     const trashRef = ref(storage, `${userId}/trash/`);
     const trashFiles = await listAll(trashRef);
