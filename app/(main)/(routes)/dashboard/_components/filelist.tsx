@@ -3,6 +3,7 @@ import { useAuth } from '@clerk/nextjs';
 import FirebaseStorageService, { FileInfo } from '@/firebase/storageService';
 import { File } from './file';
 import { Loader } from '@/components/loader';
+import { StorageReference } from 'firebase/storage';
 export const FileList = () => {
   const { userId } = useAuth();
 
@@ -30,7 +31,7 @@ export const FileList = () => {
       {loading && <Loader />}
       {error && <div>{error}</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {files.map((file: FileInfo) => (
+        {files.map((file: any) => (
           <File key={file.name} file={file} />
         ))}
       </div>

@@ -1,4 +1,5 @@
-import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject } from 'firebase/storage';
+import { metadata } from './../app/layout';
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject, StorageReference, getBlob } from 'firebase/storage';
 import { storage } from './firebaseConfig';
 
 export interface FileInfo {
@@ -54,10 +55,33 @@ class FirebaseStorageService {
     return trashFiles.items;
   }
 
-  static async moveToTrash(userId: string | null, fileRef: any) {
-    const trashRef = ref(storage, `${userId}/trash/${fileRef.name}`);
-    await uploadBytes(trashRef, fileRef);
-    return deleteObject(fileRef);
+  static async moveToTrash(userId: string | null, fileRef: StorageReference) {
+    try {
+      if (!fileRef || typeof fileRef.name !== 'string') {
+        console.error('Invalid fileRef:', fileRef);
+        return false;
+      }
+
+      const fileName = fileRef.name;
+      const trashRef = ref(storage, `${userId}/trash/${fileName}`);
+      const blob = await getBlob(fileRef);
+
+      console.log('File properties:', {
+        name: fileName,
+        fullPath: fileRef.fullPath,
+        contentType: blob.type,
+        size: blob.size,
+        // lastModified: blob.lastModified,
+      });
+
+      await uploadBytes(trashRef, blob);
+      await deleteObject(fileRef);
+
+      return true;
+    } catch (error) {
+      console.error("Error moving file to trash:", error);
+      return false;
+    }
   }
 
 
@@ -80,6 +104,9 @@ class FirebaseStorageService {
         await deleteObject(fileRef);
       })
     );
+  }
+
+  static async renameFile(userId: string | null, fileRef: any, newName: string) {
   }
 
   private static async getDownloadUrl(storageRef: any): Promise<string> {
