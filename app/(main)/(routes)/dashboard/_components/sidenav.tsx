@@ -67,13 +67,16 @@ const SideNav = () => {
 
         <div className="flex flex-col items-start mt-24">
           {menuItems.map(({ icon: Icon, ...menu }, idx) => (
-            <div key={idx}>
-              <Link href={menu.link} className="flex py-6 px-3 items-center w-full h-full">
+            <div key={idx} className={cn("mb-2 w-full", {
+              "hover:bg-gray-200 dark:hover:bg-[#3d3d3d]": !toggleCollapse,
+              "hover:text-[#3d3d3d]": toggleCollapse
+            })}>
+              <Link href={menu.link} className="flex py-6 px-3 items-center h-full">
                 <div style={{ width: "2.5rem" }}>
                   <Icon />
                 </div>
                 {!toggleCollapse && (
-                  <span className={cn("text-md font-medium text-text-light")}>
+                  <span className="text-md font-medium text-text-light">
                     {menu.label}
                   </span>
                 )}

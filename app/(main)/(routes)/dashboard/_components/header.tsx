@@ -23,7 +23,7 @@ export const Header = () => {
                 {getPageName(pathname)}
             </Link>
             <SearchBar />
-            <div className="flex items-center justify-between w-28">
+            <div className="flex items-center justify-between w-24">
                 <ModeToggle />
                 {isLoading && (
                     <Spinner size="lg" />

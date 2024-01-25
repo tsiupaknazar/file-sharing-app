@@ -6,6 +6,7 @@ import {
   FileSignature,
   Trash,
   Share,
+  Info
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -56,6 +57,10 @@ export const File = ({ file }: IFileComponentProps) => {
             <MoreVertical />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
+            <DropdownMenuItem>
+              <Info className="mr-2 h-4 w-4" />
+              <span>Info</span>
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => { }}>
               <FileSignature className="mr-2 h-4 w-4" />
               <span>Rename</span>
@@ -76,14 +81,15 @@ export const File = ({ file }: IFileComponentProps) => {
         </DropdownMenu>
       </div>
       <figure className="aspect-auto p-4 h-64">
-        {/* <Image
-          src={getIconForMimeType(file.metadata.contentType)}
+        <Image
+          // src={getIconForMimeType(file)}
+          src="/other.png"
           onClick={() => FirebaseStorageService.moveToTrash(userId!, file)}
           width={85}
           height={85}
           alt="image"
           className="w-full h-full object-none bg-white dark:bg-accent rounded-sm"
-        /> */}
+        />
       </figure>
     </div>
   );

@@ -32,12 +32,13 @@ export const TrashList = () => {
 
     return (
         <>
-            <div className="flex items-center justify-between w-full px-8 py-2">
-                <h1>Trash page</h1>
+            <div className="flex items-center justify-between w-full px-8 py-8">
+                <h1 className="text-transparent">Trash page</h1>
                 {/* <ConfirmModal onConfirm={FirebaseStorageService.clearTrash(userId!)}> */}
                 <Button
                     disabled={files.length === 0}
                     onClick={() => FirebaseStorageService.clearTrash(userId!)}
+                    className="float-right"
                 >
                     Clear Trash
                 </Button>
