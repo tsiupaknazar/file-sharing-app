@@ -1,5 +1,4 @@
-import { metadata } from './../app/layout';
-import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject, StorageReference, getBlob } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject, StorageReference, uploadString } from 'firebase/storage';
 import { storage } from './firebaseConfig';
 
 export interface FileInfo {
@@ -55,35 +54,27 @@ class FirebaseStorageService {
     return trashFiles.items;
   }
 
-  static async moveToTrash(userId: string | null, fileRef: StorageReference) {
-    try {
-      if (!fileRef || typeof fileRef.name !== 'string') {
-        console.error('Invalid fileRef:', fileRef);
-        return false;
-      }
-
-      const fileName = fileRef.name;
-      const trashRef = ref(storage, `${userId}/trash/${fileName}`);
-      const blob = await getBlob(fileRef);
-
-      console.log('File properties:', {
-        name: fileName,
-        fullPath: fileRef.fullPath,
-        contentType: blob.type,
-        size: blob.size,
-        // lastModified: blob.lastModified,
-      });
-
-      await uploadBytes(trashRef, blob);
-      await deleteObject(fileRef);
-
-      return true;
-    } catch (error) {
-      console.error("Error moving file to trash:", error);
-      return false;
+  static async moveToTrash(userId: string | null, fileRef: any) {
+    // Ensure fileRef is correctly constructed
+    if (!fileRef) {
+      throw new Error('fileRef is missing fullPath property.');
     }
-  }
 
+    // Construct a reference to the file in the original location (uploads folder)
+    const originalRef = ref(storage, fileRef.fullPath);
+
+    // Get the download URL of the original file
+    const originalDownloadURL = await getDownloadURL(originalRef);
+
+    // Upload the file to the trash location
+    const trashRef = ref(storage, `${userId}/trash/${fileRef.name}`);
+    await uploadString(trashRef, originalDownloadURL, 'data_url');
+
+    // Delete the file from the original location
+    await deleteObject(originalRef);
+
+    return true; // Indicate success
+  }
 
   static async deleteFromTrash(userId: string | null, fileRef: any) {
     await deleteObject(fileRef);
@@ -107,6 +98,10 @@ class FirebaseStorageService {
   }
 
   static async renameFile(userId: string | null, fileRef: any, newName: string) {
+    const storageRef = ref(storage, `${userId}/uploads/${newName}`);
+    await uploadBytes(storageRef, fileRef);
+    await deleteObject(fileRef);
+    return newName;
   }
 
   private static async getDownloadUrl(storageRef: any): Promise<string> {

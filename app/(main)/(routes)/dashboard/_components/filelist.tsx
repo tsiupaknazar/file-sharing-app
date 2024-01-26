@@ -17,6 +17,7 @@ export const FileList = () => {
       try {
         const files = await FirebaseStorageService.listFiles(userId!);
         setFiles(files);
+        console.log(files);
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -27,12 +28,14 @@ export const FileList = () => {
   }, [userId]);
 
   return (
-    <div className="mt-4 mx-auto w-[95%]">
+    <div className="mt-4 w-full mx-auto">
       {loading && <Loader />}
       {error && <div>{error}</div>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-8">
         {files.map((file: any) => (
-          <File key={file.name} file={file} />
+          <div key={file.name}>
+            <File file={file} />
+          </div>
         ))}
       </div>
     </div>

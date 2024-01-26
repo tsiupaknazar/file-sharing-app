@@ -2,51 +2,45 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FirebaseStorageService from '@/firebase/storageService';
-import { storage } from '@/firebase/firebaseConfig';
 
-import { Button, buttonVariants } from "@/components/ui/button"
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
-import { CardTitle, CardDescription, Card } from "@/components/ui/card"
 import { Upload } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from "@clerk/nextjs";
-import { cn } from '@/lib/utils';
+import { Spinner } from '@/components/spinner';
+import { ToastContainer, toast } from "react-toastify";
 
 export default function UploadPage() {
   const { userId } = useAuth();
-
-  const [filePreview, setFilePreview] = useState<any>(null);
-  const [fileData, setFileData] = useState<any>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const onDrop = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
       try {
-        const url = await FirebaseStorageService.uploadFile(userId!, file);
-
-        // Add file preview
-        const objectUrl = URL.createObjectURL(file);
-        setFilePreview(objectUrl);
-        setFileData(file);
+        setIsUploading(true);
+        await FirebaseStorageService.uploadFile(userId!, file);
+        toast.success("File uploaded successfully!");
       } catch (error) {
         console.error("Error uploading file:", error);
+        toast.error("Error uploading file.");
+      } finally {
+        setIsUploading(false);
       }
     }
   };
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  const dropzoneStyle: React.CSSProperties = {
-    border: "2px dashed #cccccc",
-    borderRadius: "4px",
-    padding: "20px",
-    textAlign: "center",
-    cursor: "pointer",
-  };
-
   return (
     <>
-      <div className="max-w-2xl mx-auto mt-12">
+      <div className="max-w-3xl mx-auto mt-12">
+        {isUploading && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="m-auto">
+              <Spinner size="lg" />
+            </div>
+          </div>
+        )}
         <div
           className="flex items-center justify-center w-full"
           {...getRootProps()}
@@ -73,29 +67,8 @@ export default function UploadPage() {
             />
           </label>
         </div>
-        {filePreview && (
-          <div>
-            <Image src={filePreview} width={50} height={50} alt="File preview" />
-            <div className="text-center mt-2 text-sm text-gray-500 dark:text-gray-400">
-              {fileData.name}
-              <br />
-              {fileData.size} bytes
-              <br />
-              {fileData.type}
-              {/* <br />
-              {filePreview.lastModified}
-              <br /> */}
-            </div>
-          </div>
-        )}
-        <Button
-          size="lg"
-          className={cn(buttonVariants())}
-          onClick={() => onDrop}
-        >
-          Upload
-        </Button>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }

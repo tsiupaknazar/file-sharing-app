@@ -1,6 +1,5 @@
 "use client";
 
-import { ModeToggle } from "@/components/mode-toggle";
 import { Spinner } from "@/components/spinner";
 import { UserButton, auth } from "@clerk/nextjs";
 import Link from "next/link";
@@ -8,6 +7,7 @@ import { useState } from "react";
 import { usePathname } from 'next/navigation'
 import { getPageName } from "@/utils/getPageName";
 import { SearchBar } from "@/components/searchbar";
+import ThemeButton from "@/components/theme-change-button";
 
 export const Header = () => {
     const pathname = usePathname()
@@ -24,7 +24,7 @@ export const Header = () => {
             </Link>
             <SearchBar />
             <div className="flex items-center justify-between w-24">
-                <ModeToggle />
+                <ThemeButton />
                 {isLoading && (
                     <Spinner size="lg" />
                 )}

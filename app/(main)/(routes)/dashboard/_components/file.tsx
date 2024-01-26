@@ -1,4 +1,4 @@
-import { getIconForMimeType } from "@/utils/mimeTypeToIcon";
+import { getExtensionIcon } from "@/utils/getExtensionIcon";
 import Image from "next/image";
 import {
   MoreVertical,
@@ -43,14 +43,10 @@ interface IFileComponentProps {
 export const File = ({ file }: IFileComponentProps) => {
   const { userId } = useAuth();
   return (
-    <div
-      className="bg-accent w-72 h-72 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer"
-    >
+    <div className="bg-accent w-full m-auto md:w-72 h-auto md:h-72 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer">
       <div className="flex justify-between items-center px-4 h-10">
-        <span>
-          {file.name.length > 15
-            ? file.name.slice(0, 15) + "..."
-            : file.name}
+        <span className="whitespace-nowrap">
+          {file.name.length > 15 ? file.name.slice(0, 15) + "..." : file.name}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -80,11 +76,9 @@ export const File = ({ file }: IFileComponentProps) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <figure className="aspect-auto p-4 h-64">
+      <figure className="aspect-auto p-4 h-auto md:h-64">
         <Image
-          // src={getIconForMimeType(file)}
-          src="/other.png"
-          onClick={() => FirebaseStorageService.moveToTrash(userId!, file)}
+          src={getExtensionIcon(file.name)}
           width={85}
           height={85}
           alt="image"
@@ -92,5 +86,6 @@ export const File = ({ file }: IFileComponentProps) => {
         />
       </figure>
     </div>
+
   );
 };

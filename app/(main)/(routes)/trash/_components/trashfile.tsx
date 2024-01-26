@@ -1,4 +1,4 @@
-import { getIconForMimeType } from "@/utils/mimeTypeToIcon";
+import { getExtensionIcon } from "@/utils/getExtensionIcon";
 import Image from "next/image";
 import {
   MoreVertical,
