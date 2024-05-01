@@ -55,36 +55,50 @@ class FirebaseStorageService {
   }
 
   static async moveToTrash(userId: string | null, fileRef: any) {
-    // Ensure fileRef is correctly constructed
     if (!fileRef) {
       throw new Error('fileRef is missing fullPath property.');
     }
 
-    // Construct a reference to the file in the original location (uploads folder)
-    const originalRef = ref(storage, fileRef.fullPath);
+    const originalRef = ref(storage, `${userId}/uploads/${fileRef.name}`);
 
-    // Get the download URL of the original file
-    const originalDownloadURL = await getDownloadURL(originalRef);
+    const originalDownloadURL = await this.getDownloadUrl(originalRef);
 
-    // Upload the file to the trash location
     const trashRef = ref(storage, `${userId}/trash/${fileRef.name}`);
-    await uploadString(trashRef, originalDownloadURL, 'data_url');
+    await uploadBytes(trashRef, fileRef, { contentType: fileRef.contentType });
 
-    // Delete the file from the original location
     await deleteObject(originalRef);
 
-    return true; // Indicate success
+    return true;
   }
 
-  static async deleteFromTrash(userId: string | null, fileRef: any) {
+
+  static async deleteFromTrash(fileRef: any) {
     await deleteObject(fileRef);
   }
 
-  static async restoreFromTrash(userId: string | null, fileRef: any) {
-    const storageRef = ref(storage, `${userId}/uploads/${fileRef.name}`);
-    await uploadBytes(storageRef, fileRef);
-    return deleteObject(fileRef);
+  static async restoreFromTrash(userId: string | null, fileRef: any): Promise<boolean> {
+    try {
+      // Check if fileRef is valid and contains necessary properties
+      if (!fileRef || !fileRef.fullPath) {
+        throw new Error('Invalid file reference.');
+      }
+
+      // Create a reference to the original location in the uploads folder
+      const originalRef = ref(storage, `${userId}/uploads/${fileRef.name}`);
+
+      // Upload the file back to its original location
+      await uploadBytes(originalRef, fileRef);
+
+      // Delete the file from the trash
+      await deleteObject(fileRef);
+
+      return true; // Restoration successful
+    } catch (error) {
+      console.error('Error restoring file from trash:', error);
+      return false; // Restoration failed
+    }
   }
+
 
   static async clearTrash(userId: string | null) {
     const trashRef = ref(storage, `${userId}/trash/`);
@@ -98,9 +112,14 @@ class FirebaseStorageService {
   }
 
   static async renameFile(userId: string | null, fileRef: any, newName: string) {
+    if (!fileRef) {
+      throw new Error('Error');
+    }
     const storageRef = ref(storage, `${userId}/uploads/${newName}`);
+    console.log("Before: ", storageRef, fileRef);
     await uploadBytes(storageRef, fileRef);
     await deleteObject(fileRef);
+    console.log("After: ", storageRef, fileRef);
     return newName;
   }
 

@@ -24,7 +24,7 @@ const SideNav = () => {
   }, [toggleCollapse]);
 
   const wrapperClasses = cn(
-    "h-screen px-4 pt-8 pb-4 bg-light flex justify-between flex-col border border-r-2",
+    "h-screen px-4 pt-8 pb-4 bg-light hidden md:flex justify-between flex-col border border-r-2",
     {
       "w-80": !toggleCollapse,
       "w-20": toggleCollapse,

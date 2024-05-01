@@ -14,21 +14,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
 import FirebaseStorageService from "@/firebase/storageService";
 import { useAuth } from "@clerk/nextjs";
-import { StorageReference } from "firebase/storage";
 
 interface FileInfo {
   name: string;
@@ -37,11 +24,22 @@ interface FileInfo {
 }
 
 interface IFileComponentProps {
-  file: StorageReference;
+  file: FileInfo;
+  updateFiles: (updatedFiles: FileInfo[]) => void;
 }
 
-export const File = ({ file }: IFileComponentProps) => {
+export const File = ({ file, updateFiles }: IFileComponentProps) => {
   const { userId } = useAuth();
+
+  const handleDelete = async () => {
+    try {
+      await FirebaseStorageService.moveToTrash(userId!, file);
+      const updatedFiles = await FirebaseStorageService.listFiles(userId!);
+      updateFiles(updatedFiles);
+    } catch (error) {
+      console.error("Error deleting file:", error);
+    }
+  };
   return (
     <div className="bg-accent w-full m-auto md:w-72 h-auto md:h-72 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer">
       <div className="flex justify-between items-center px-4 h-10">
@@ -57,7 +55,7 @@ export const File = ({ file }: IFileComponentProps) => {
               <Info className="mr-2 h-4 w-4" />
               <span>Info</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => { }}>
+            <DropdownMenuItem onClick={() => FirebaseStorageService.renameFile(userId!, file.name, "TestName")}>
               <FileSignature className="mr-2 h-4 w-4" />
               <span>Rename</span>
             </DropdownMenuItem>
@@ -69,7 +67,7 @@ export const File = ({ file }: IFileComponentProps) => {
               <Share className="mr-2 h-4 w-4" />
               <span>Share</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => FirebaseStorageService.moveToTrash(userId!, file)}>
+            <DropdownMenuItem onClick={handleDelete}>
               <Trash className="mr-2 h-4 w-4" />
               <span>Delete</span>
             </DropdownMenuItem>

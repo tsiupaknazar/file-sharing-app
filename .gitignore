@@ -20,6 +20,9 @@
 .DS_Store
 *.pem
 
+# notes file
+todo.txt
+
 # debug
 npm-debug.log*
 yarn-debug.log*

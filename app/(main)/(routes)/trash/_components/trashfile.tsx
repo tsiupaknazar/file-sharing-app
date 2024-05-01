@@ -35,10 +35,30 @@ interface TrashFileInfo {
 
 interface IFileComponentProps {
   file: StorageReference;
+  updateFiles: (updatedFiles: TrashFileInfo[]) => void;
 }
 
-export const TrashFile = ({ file }: IFileComponentProps) => {
+export const TrashFile = ({ file, updateFiles }: IFileComponentProps) => {
   const { userId } = useAuth();
+
+  const handleRestoreFile = async () => {
+    try {
+      await FirebaseStorageService.restoreFromTrash(userId!, file)
+      const updatedFiles = await FirebaseStorageService.getTrashFiles(userId!);
+      updateFiles(updatedFiles);
+    } catch (error) {
+      console.error("Error restoring file:", error);
+    }
+  }
+  const handleDeleteFile = async () => {
+    try {
+      await FirebaseStorageService.deleteFromTrash(file)
+      const updatedFiles = await FirebaseStorageService.getTrashFiles(userId!);
+      updateFiles(updatedFiles);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
   return (
     <div
       className="bg-accent w-96 h-96 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer"
@@ -54,15 +74,15 @@ export const TrashFile = ({ file }: IFileComponentProps) => {
             <MoreVertical />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleRestoreFile}>
               <ArchiveRestore className="mr-2 h-4 w-4" />
               <span>Restore</span>
             </DropdownMenuItem>
             {/* <ConfirmModal onConfirm={() => {}}> */}
-              <DropdownMenuItem>
-                <Trash className="mr-2 h-4 w-4" />
-                <span>Delete</span>
-              </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDeleteFile}>
+              <Trash className="mr-2 h-4 w-4" />
+              <span>Delete</span>
+            </DropdownMenuItem>
             {/* </ConfirmModal> */}
           </DropdownMenuContent>
         </DropdownMenu>

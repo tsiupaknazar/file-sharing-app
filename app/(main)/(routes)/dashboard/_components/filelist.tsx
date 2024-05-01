@@ -19,7 +19,7 @@ export const FileList = () => {
   const [files, setFiles] = useState<FileInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc' | 'date-asc' | 'date-desc'>('name-asc');
+  const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc' | 'date-asc' | 'date-desc' | 'default'>('default');
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -74,29 +74,34 @@ export const FileList = () => {
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(e.target.value as 'name-asc' | 'name-desc' | 'date-asc' | 'date-desc');
+    sortFiles(e.target.value);
   };
+
+  const updateFiles = (updatedFiles: FileInfo[]) => {
+    setFiles(updatedFiles);
+  };
+
+  useEffect(() => {
+    sortFiles(sortBy);
+  }, []);
 
   return (
     <div className="mt-4 w-full mx-auto border-2 border-red-700">
       {loading && <Loader />}
       {error && <div>{error}</div>}
-      <div className='w-full px-2 py-4'>
-        <Select value={sortBy} onChange={handleSortChange}>
-          <SelectTrigger className="w-[180px] ml-0">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="name-asc">Name: A-Z</SelectItem>
-            <SelectItem value="name-desc">Name: Z-A</SelectItem>
-            {/* <SelectItem value="dateold">Date: Oldest first</SelectItem> */}
-            {/* <SelectItem value="datenew">Date: Newest first</SelectItem> */}
-          </SelectContent>
-        </Select>
+      <div className='w-full px-2 py-4 flex justify-end'>
+        <select className='w-[200px] px-8 py-2 rounded-lg' value={sortBy} onChange={handleSortChange}>
+          <option value="default">Default</option>
+          <option value="name-asc">Name: A-Z</option>
+          <option value="name-desc">Name: Z-A</option>
+          {/* <option value="date-asc">Date: Oldest first</option>
+          <option value="date-desc">Date: Newest first</option> */}
+        </select>
       </div>
       <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-8">
         {files.map((file: any) => (
           <div key={file.name}>
-            <File file={file} />
+            <File file={file} updateFiles={updateFiles} />
           </div>
         ))}
       </div>
