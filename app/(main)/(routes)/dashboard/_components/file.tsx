@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import FirebaseStorageService from "@/firebase/storageService";
 import { useAuth } from "@clerk/nextjs";
+import { FileViewModal } from "@/components/modals/file-view-modal";
 
 interface FileInfo {
   name: string;
@@ -40,6 +41,13 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
       console.error("Error deleting file:", error);
     }
   };
+  const handleDownloadFile = async () => {
+    try {
+      await FirebaseStorageService.downloadFile(userId!, file.downloadUrl!);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  }
   return (
     <div className="bg-accent w-full m-auto md:w-72 h-auto md:h-72 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer">
       <div className="flex justify-between items-center px-4 h-10">
@@ -51,7 +59,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
             <MoreVertical />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => FirebaseStorageService.viewFile(userId!, file.name)}>
               <Info className="mr-2 h-4 w-4" />
               <span>Info</span>
             </DropdownMenuItem>
@@ -59,7 +67,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
               <FileSignature className="mr-2 h-4 w-4" />
               <span>Rename</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDownloadFile}>
               <Download className="mr-2 h-4 w-4" />
               <span>Download</span>
             </DropdownMenuItem>
@@ -84,6 +92,5 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
         />
       </figure>
     </div>
-
   );
 };

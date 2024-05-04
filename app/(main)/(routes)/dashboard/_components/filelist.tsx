@@ -3,15 +3,9 @@ import { useAuth } from '@clerk/nextjs';
 import FirebaseStorageService, { FileInfo } from '@/firebase/storageService';
 import { File } from './file';
 import { Loader } from '@/components/loader';
-import { StorageReference } from 'firebase/storage';
-import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { FileIcon } from "lucide-react"
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export const FileList = () => {
   const { userId } = useAuth();
@@ -86,25 +80,38 @@ export const FileList = () => {
   }, []);
 
   return (
-    <div className="mt-4 w-full mx-auto border-2 border-red-700">
-      {loading && <Loader />}
-      {error && <div>{error}</div>}
-      <div className='w-full px-2 py-4 flex justify-end'>
-        <select className='w-[200px] px-8 py-2 rounded-lg' value={sortBy} onChange={handleSortChange}>
-          <option value="default">Default</option>
-          <option value="name-asc">Name: A-Z</option>
-          <option value="name-desc">Name: Z-A</option>
-          {/* <option value="date-asc">Date: Oldest first</option>
-          <option value="date-desc">Date: Newest first</option> */}
-        </select>
-      </div>
-      <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-8">
-        {files.map((file: any) => (
-          <div key={file.name}>
-            <File file={file} updateFiles={updateFiles} />
+    <>
+      {files.length === 0 && (
+        <div className="flex flex-col items-center justify-center w-full h-[90vh] dark:bg-[#1F1F1F]">
+          <div className="flex flex-col items-center space-y-4">
+            <FileIcon className="h-24 w-24 text-gray-500 dark:text-gray-400" />
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Your file storage is empty</h1>
+            <p className="text-gray-500 dark:text-gray-400 max-w-md text-center">
+              <Link href="/upload" className='font-bold underline'>Upload</Link> your first file to get started
+            </p>
           </div>
-        ))}
+        </div>
+      )}
+      <div className={cn(`w-full mx-auto border-2 border-red-700 ${files.length === 0 && 'hidden'}`)}>
+        {loading && <Loader />}
+        {error && <div>{error}</div>}
+        <div className='w-full px-4 py-4 flex justify-end'>
+          <select className='w-[200px] px-8 py-2 rounded-lg' value={sortBy} onChange={handleSortChange}>
+            <option value="default">Sort by:</option>
+            <option value="name-asc">Name: A-Z</option>
+            <option value="name-desc">Name: Z-A</option>
+            {/* <option value="date-asc">Date: Oldest first</option>
+          <option value="date-desc">Date: Newest first</option> */}
+          </select>
+        </div>
+        <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-4">
+          {files.map((file: any) => (
+            <div key={file.name} className='border-2 border-green-400'>
+              <File file={file} updateFiles={updateFiles} />
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };

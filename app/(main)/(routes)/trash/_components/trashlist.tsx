@@ -4,6 +4,8 @@ import FirebaseStorageService, { FileInfo, TrashFileInfo } from '@/firebase/stor
 import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import { TrashFile } from './trashfile';
+import EmptyTrashPage from './empty-trash';
+import { cn } from '@/lib/utils';
 
 export const TrashList = () => {
     const { userId } = useAuth();
@@ -43,26 +45,24 @@ export const TrashList = () => {
 
     return (
         <>
-            <div className="flex items-center justify-between w-full px-8 py-8">
+            <div className={cn(`flex items-center justify-between w-full px-8 py-8 ${files.length === 0 && 'hidden'}`)}>
                 <h1 className="text-transparent">Trash page</h1>
                 <Button
-                    disabled={files.length === 0}
                     onClick={handleClearTrash}
-                    className="float-right"
                 >
                     Clear Trash
                 </Button>
             </div>
-            <div className="mt-8 mx-auto w-[95%]">
+            <div className={cn(`mt-8 mx-auto w-[95%] ${files.length === 0 && 'hidden'}`)}>
                 {loading && <Loader />}
                 {error && <div>{error}</div>}
                 <div className="flex gap-4">
                     {files.map((file: any) => (
                         <TrashFile key={file.name} file={file} updateFiles={updateFiles} />
                     ))}
-                    {files.length === 0 && <div>No files in trash</div>}
                 </div>
             </div>
+            {files.length === 0 && <EmptyTrashPage />}
         </>
     );
 }
