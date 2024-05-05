@@ -48,6 +48,16 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
       console.error("Error downloading file:", error);
     }
   }
+  //write a function to rename the file(use the rename function from firebase/storageService.ts)
+  const handleRename = async () => {
+    try {
+      await FirebaseStorageService.renameFile(userId!, file?.name, "newFileName");
+      const updatedFiles = await FirebaseStorageService.listFiles(userId!);
+      updateFiles(updatedFiles);
+    } catch (error) {
+      console.error("Error renaming file:", error);
+    }
+  }
   return (
     <div className="bg-accent w-full m-auto md:w-72 h-auto md:h-72 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer">
       <div className="flex justify-between items-center px-4 h-10">
@@ -63,7 +73,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
               <Info className="mr-2 h-4 w-4" />
               <span>Info</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => FirebaseStorageService.renameFile(userId!, file.name, "TestName")}>
+            <DropdownMenuItem onClick={handleRename}>
               <FileSignature className="mr-2 h-4 w-4" />
               <span>Rename</span>
             </DropdownMenuItem>

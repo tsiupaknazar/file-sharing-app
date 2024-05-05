@@ -1,6 +1,6 @@
-import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject, UploadTask, uploadBytesResumable } from 'firebase/storage';
 import { storage } from './firebaseConfig';
-import { log } from 'console';
+
 
 export interface FileInfo {
   name: string;
@@ -13,15 +13,15 @@ export interface TrashFileInfo {
 }
 
 class FirebaseStorageService {
-  static async uploadFile(userId: string | null, file: File): Promise<string | null> {
-    try {
+  static uploadFile(userId: string | null, file: File): UploadTask {
+    // try {
       const storageRef = ref(storage, `${userId}/uploads/${file.name}`);
-      await uploadBytes(storageRef, file);
-      return await this.getDownloadUrl(storageRef);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      return null;
-    }
+      return uploadBytesResumable(storageRef, file);
+      // return await this.getDownloadUrl(storageRef);
+    // } catch (error) {
+    //   console.error('Error uploading file:', error);
+    //   return null;
+    // }
   }
 
   static async listFiles(userId: string | null): Promise<FileInfo[]> {
@@ -116,11 +116,16 @@ class FirebaseStorageService {
     if (!fileRef) {
       throw new Error('Error');
     }
-    const storageRef = ref(storage, `${userId}/uploads/${newName}`);
-    console.log("Before: ", storageRef, fileRef);
-    await uploadBytes(storageRef, fileRef);
-    await deleteObject(fileRef);
-    console.log("After: ", storageRef, fileRef);
+    const storageRef = ref(storage, `${userId}/uploads/${fileRef.name}`);
+    const newStorageRef = ref(storage, `${userId}/uploads/${newName}`);
+    const metadata = await this.getFileMetadata(storageRef);
+    const downloadUrl = metadata.downloadURL;
+    await fetch(downloadUrl)
+      .then((response) => response.blob())
+      .then(async (blob) => {
+        await uploadBytes(newStorageRef, blob);
+      });
+    await deleteObject(storageRef);
     return newName;
   }
 
