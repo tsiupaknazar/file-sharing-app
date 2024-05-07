@@ -16,7 +16,7 @@ const AuthPage = () => {
         <>
             <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
                 <p className="mr-6">
-                    <ShareIcon className="h-6 w-6" />
+                    <Image src="/logofulldark.png" width={200} height={200} alt="Logo" />
                     <span className="sr-only">EasyShare</span>
                 </p>
                 <div className="ml-auto">
