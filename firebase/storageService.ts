@@ -1,3 +1,4 @@
+import { convertTime } from './../utils/convertTime';
 import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject, UploadTask, uploadBytesResumable } from 'firebase/storage';
 import { storage } from './firebaseConfig';
 
@@ -6,6 +7,7 @@ export interface FileInfo {
   name: string;
   type: string;
   downloadUrl: string;
+  uploadTime: string;
 }
 
 export interface TrashFileInfo {
@@ -14,14 +16,8 @@ export interface TrashFileInfo {
 
 class FirebaseStorageService {
   static uploadFile(userId: string | null, file: File): UploadTask {
-    // try {
       const storageRef = ref(storage, `${userId}/uploads/${file.name}`);
       return uploadBytesResumable(storageRef, file);
-      // return await this.getDownloadUrl(storageRef);
-    // } catch (error) {
-    //   console.error('Error uploading file:', error);
-    //   return null;
-    // }
   }
 
   static async listFiles(userId: string | null): Promise<FileInfo[]> {
@@ -33,10 +29,13 @@ class FirebaseStorageService {
         filesList.items.map(async (item) => {
           const downloadUrl = await this.getDownloadUrl(item);
           const metadata = await this.getFileMetadata(item);
+          console.log(metadata);
+          console.log(downloadUrl);
           return {
             name: item.name,
             type: metadata.contentType || 'Unknown Type',
             downloadUrl,
+            uploadTime: convertTime(metadata.timeCreated),
           };
         })
       );
@@ -204,6 +203,18 @@ class FirebaseStorageService {
     } catch (error) {
       console.error('Error viewing file:', error);
     }
+  }
+
+  static async getFileInfo(userId: string | null, fileName: string): Promise<FileInfo> {
+    const fileRef = ref(storage, `${userId}/uploads/${fileName}`);
+    const downloadUrl = await this.getDownloadUrl(fileRef);
+    const metadata = await this.getFileMetadata(fileRef);
+    return {
+      name: fileName,
+      type: metadata.contentType || 'Unknown Type',
+      downloadUrl,
+      uploadTime: convertTime(metadata.timeCreated),
+    };
   }
 
   private static async getFileText(storageRef: any): Promise<string> {

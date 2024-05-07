@@ -119,6 +119,7 @@ export const getExtensionIcon = (fileName: string): FileIcon => {
         case 'php':
             return FileIcon.PHP;
         case 'ppt':
+        case 'pptx':
             return FileIcon.PPT;
         case 'ps':
             return FileIcon.PS;

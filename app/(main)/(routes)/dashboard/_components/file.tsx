@@ -22,6 +22,7 @@ interface FileInfo {
   name: string;
   type: string;
   downloadUrl: string;
+  uploadTime: string;
 }
 
 interface IFileComponentProps {
@@ -43,7 +44,8 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
   };
   const handleDownloadFile = async () => {
     try {
-      await FirebaseStorageService.downloadFile(userId!, file.downloadUrl!);
+      console.log("Downloading file:", file.downloadUrl);
+      await FirebaseStorageService.downloadFile(userId!, file.downloadUrl);
     } catch (error) {
       console.error("Error downloading file:", error);
     }
@@ -51,7 +53,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
   //write a function to rename the file(use the rename function from firebase/storageService.ts)
   const handleRename = async () => {
     try {
-      await FirebaseStorageService.renameFile(userId!, file?.name, "newFileName");
+      await FirebaseStorageService.renameFile(userId!, file?.name, "newFileName.pptx");
       const updatedFiles = await FirebaseStorageService.listFiles(userId!);
       updateFiles(updatedFiles);
     } catch (error) {
@@ -63,6 +65,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
       <div className="flex justify-between items-center px-4 h-10">
         <span className="whitespace-nowrap">
           {file.name.length > 15 ? file.name.slice(0, 15) + "..." : file.name}
+          {/* {file.downloadUrl} */}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -87,7 +90,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleDelete}>
               <Trash className="mr-2 h-4 w-4" />
-              <span>Delete</span>
+              <span>Move to trash</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -98,6 +101,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
           width={85}
           height={85}
           alt="image"
+          priority
           className="w-full h-full object-none bg-white dark:bg-accent rounded-sm"
         />
       </figure>

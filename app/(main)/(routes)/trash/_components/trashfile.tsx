@@ -89,11 +89,11 @@ export const TrashFile = ({ file, updateFiles }: IFileComponentProps) => {
       </div>
       <figure className="aspect-auto p-4 h-80">
         <Image
-          src="/other.png"
-          onClick={() => FirebaseStorageService.moveToTrash(userId!, file)}
+          src={getExtensionIcon(file.name)}
           width={85}
           height={85}
           alt="image"
+          priority
           className="w-full h-full object-none bg-white dark:bg-accent rounded-sm"
         />
       </figure>
