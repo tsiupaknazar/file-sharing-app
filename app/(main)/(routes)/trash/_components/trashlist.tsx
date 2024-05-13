@@ -4,8 +4,8 @@ import FirebaseStorageService, { FileInfo, TrashFileInfo } from '@/firebase/stor
 import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import { TrashFile } from './trashfile';
-import EmptyTrashPage from './empty-trash';
 import { cn } from '@/lib/utils';
+import EmptyPage from '@/components/empty-page';
 
 export const TrashList = () => {
     const { userId } = useAuth();
@@ -62,7 +62,7 @@ export const TrashList = () => {
                     ))}
                 </div>
             </div>
-            {files.length === 0 && <EmptyTrashPage />}
+            {files.length === 0 && <EmptyPage iconName="Trash" contentHeader="Trash is Empty" content='Your trash is currently empty. Anything you delete will appear here for you to review or permanently remove.' />}
         </>
     );
 }

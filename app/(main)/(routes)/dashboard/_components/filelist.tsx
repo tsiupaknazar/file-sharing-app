@@ -3,9 +3,9 @@ import { useAuth } from '@clerk/nextjs';
 import FirebaseStorageService, { FileInfo } from '@/firebase/storageService';
 import { File } from './file';
 import { Loader } from '@/components/loader';
-import { FileIcon } from "lucide-react"
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import EmptyPage from '@/components/empty-page';
 
 export const FileList = () => {
   const { userId } = useAuth();
@@ -82,15 +82,11 @@ export const FileList = () => {
   return (
     <>
       {files.length === 0 && (
-        <div className="flex flex-col items-center justify-center w-full h-[90vh] dark:bg-[#1F1F1F]">
-          <div className="flex flex-col items-center space-y-4">
-            <FileIcon className="h-24 w-24 text-gray-500 dark:text-gray-400" />
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Your file storage is empty</h1>
-            <p className="text-gray-500 dark:text-gray-400 max-w-md text-center">
-              <Link href="/upload" className='font-bold underline'>Upload</Link> your first file to get started
-            </p>
-          </div>
-        </div>
+        <EmptyPage
+          iconName='File'
+          contentHeader='Your file storage is empty'>
+          <Link href="/upload" className='font-bold underline'>Upload</Link> your first file to get started
+        </EmptyPage>
       )}
       <div className={cn(`w-full mx-auto border-2 border-red-700 ${files.length === 0 && 'hidden'}`)}>
         {loading && <Loader />}
