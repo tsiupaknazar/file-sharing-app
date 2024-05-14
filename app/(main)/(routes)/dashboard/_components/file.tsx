@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import FirebaseStorageService from "@/firebase/storageService";
 import { useAuth } from "@clerk/nextjs";
-import { FileViewModal } from "@/components/modals/file-view-modal";
+import { FileViewModal, useDialog } from "@/components/modals/file-view-modal";
 
 interface FileInfo {
   name: string;
@@ -32,6 +32,7 @@ interface IFileComponentProps {
 
 export const File = ({ file, updateFiles }: IFileComponentProps) => {
   const { userId } = useAuth();
+  const dialog = useDialog();
 
   const handleDelete = async () => {
     try {
@@ -72,7 +73,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
             <MoreVertical />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuItem onClick={() => FirebaseStorageService.viewFile(userId!, file.name)}>
+            <DropdownMenuItem onClick={() => dialog.onOpen()}>
               <Info className="mr-2 h-4 w-4" />
               <span>Info</span>
             </DropdownMenuItem>

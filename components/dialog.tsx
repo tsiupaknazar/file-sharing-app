@@ -1,4 +1,11 @@
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../ui/dialog"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 import { create } from "zustand";
 
 interface DialogProps {
@@ -9,7 +16,7 @@ interface DialogProps {
     setData(data: any): void;
 }
 
-export const useDialog = create<DialogProps>((set) => ({
+const useDialog = create<DialogProps>((set) => ({
     isOpen: false,
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),
@@ -17,10 +24,13 @@ export const useDialog = create<DialogProps>((set) => ({
     setData: (data) => set({ data }),
 }));
 
-export const FileViewModal = () => {
+const DialogComponent = () => {
     const { isOpen, onClose } = useDialog();
     return (
         <Dialog onOpenChange={onClose} open={isOpen} modal defaultOpen={isOpen}>
+            <DialogTrigger>
+                <button>Open Dialog</button>
+            </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Dialog Title</DialogTitle>

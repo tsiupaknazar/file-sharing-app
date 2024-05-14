@@ -1,4 +1,4 @@
-import { convertTime } from './../utils/convertTime';
+import { convertTime } from '../utils/timeUtils';
 import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject, UploadTask, uploadBytesResumable } from 'firebase/storage';
 import { storage } from './firebaseConfig';
 
