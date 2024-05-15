@@ -5,13 +5,16 @@ import FirebaseStorageService from '@/firebase/storageService';
 
 import { Upload } from 'lucide-react';
 import { useAuth } from "@clerk/nextjs";
-import { ToastContainer, toast } from "react-toastify";
+import { useToast } from "@/components/ui/use-toast"
+
 import { Progress } from "@/components/ui/progress"
+import { cn } from '@/lib/utils';
 
 export default function UploadPage() {
   const { userId } = useAuth();
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const { toast } = useToast();
 
   const onDrop = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -25,14 +28,29 @@ export default function UploadPage() {
         },
         (error) => {
           console.error("Error uploading file:", error);
-          toast.error("Error uploading file.");
+          toast({
+            title: "Uh oh! Something went wrong.",
+            description: "Error uploading your file.",
+            variant: "destructive",
+            duration: 3000,
+            className: cn(
+              'top-0 right-0 flex fixed md:max-w-[340px] md:top-4 md:right-4'
+            ),
+          })
           setProgress(0);
           setIsUploading(false);
         },
         () => {
           setProgress(100);
           setIsUploading(false);
-          toast.success("File uploaded successfully!");
+          toast({
+            title: "Success!!",
+            description: "File uploaded successfully.",
+            duration: 3000,
+            className: cn(
+              'top-0 right-0 flex fixed bg-accent dark:bg-accent md:max-w-[320px] md:top-4 md:right-4'
+            ),
+          })
         }
       );
     }
@@ -77,7 +95,6 @@ export default function UploadPage() {
           </div>
         )}
       </div>
-      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }

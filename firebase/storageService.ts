@@ -1,5 +1,5 @@
 import { convertTime } from '../utils/timeUtils';
-import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject, UploadTask, uploadBytesResumable } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL, getMetadata, deleteObject, UploadTask, uploadBytesResumable, uploadString } from 'firebase/storage';
 import { storage } from './firebaseConfig';
 
 
@@ -16,8 +16,8 @@ export interface TrashFileInfo {
 
 class FirebaseStorageService {
   static uploadFile(userId: string | null, file: File): UploadTask {
-      const storageRef = ref(storage, `${userId}/uploads/${file.name}`);
-      return uploadBytesResumable(storageRef, file);
+    const storageRef = ref(storage, `${userId}/uploads/${file.name}`);
+    return uploadBytesResumable(storageRef, file);
   }
 
   static async listFiles(userId: string | null): Promise<FileInfo[]> {
@@ -29,8 +29,6 @@ class FirebaseStorageService {
         filesList.items.map(async (item) => {
           const downloadUrl = await this.getDownloadUrl(item);
           const metadata = await this.getFileMetadata(item);
-          console.log(metadata);
-          console.log(downloadUrl);
           return {
             name: item.name,
             type: metadata.contentType || 'Unknown Type',
@@ -39,7 +37,7 @@ class FirebaseStorageService {
           };
         })
       );
-      console.log("FileInfos: ", fileInfos);
+      // console.log("FileInfos: ", fileInfos);
       return fileInfos;
     } catch (error) {
       console.error('Error listing files:', error);
@@ -111,21 +109,30 @@ class FirebaseStorageService {
     );
   }
 
-  static async renameFile(userId: string | null, fileRef: any, newName: string) {
-    if (!fileRef) {
-      throw new Error('Error');
+  static async renameFile(userId: string | null, oldName: string, newName: string) {
+    try {
+      if (oldName === newName) {
+        throw new Error('New name is the same as the old name.');
+      }
+
+      const oldExtension = oldName.split('.').pop();
+
+      const newFileName = `${newName}.${oldExtension}`;
+
+      const oldFileRef = ref(storage, `${userId}/uploads/${oldName}`);
+
+      const downloadUrl = await getDownloadURL(oldFileRef);
+
+      await deleteObject(oldFileRef);
+
+      const newFileRef = ref(storage, `${userId}/uploads/${newFileName}`);
+      await uploadString(newFileRef, downloadUrl);
+
+      return "File renamed successfully";
+    } catch (error) {
+      console.error('Error renaming file:', error);
+      throw error;
     }
-    const storageRef = ref(storage, `${userId}/uploads/${fileRef.name}`);
-    const newStorageRef = ref(storage, `${userId}/uploads/${newName}`);
-    const metadata = await this.getFileMetadata(storageRef);
-    const downloadUrl = metadata.downloadURL;
-    await fetch(downloadUrl)
-      .then((response) => response.blob())
-      .then(async (blob) => {
-        await uploadBytes(newStorageRef, blob);
-      });
-    await deleteObject(storageRef);
-    return newName;
   }
 
   private static async getDownloadUrl(storageRef: any): Promise<string> {

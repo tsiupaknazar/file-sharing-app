@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import { ClerkProvider } from '@clerk/nextjs'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ModalProvider } from "@/components/providers/modal-provider"
+
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -44,6 +45,7 @@ export default function RootLayout({
             <ModalProvider />
           </ThemeProvider>
           <SpeedInsights />
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
