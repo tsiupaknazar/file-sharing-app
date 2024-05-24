@@ -93,6 +93,7 @@ export const getExtensionIcon = (fileName: string): FileIcon => {
         case 'iso':
             return FileIcon.ISO;
         case 'jpg':
+        case 'jpeg':
             return FileIcon.JPG;
         case 'js':
             return FileIcon.JS;

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import EmptyPage from '@/components/empty-page';
 // import { parseDate } from '@/utils/parseDate';
+import useSearchStore from '@/store/searchStore';
 
 export const FileList = () => {
   const { userId } = useAuth();
@@ -15,6 +16,11 @@ export const FileList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc' | 'date-asc' | 'date-desc' | 'default'>('default');
+  const { searchTerm } = useSearchStore();
+
+  const filteredFiles = files.filter(file =>
+    file.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -117,7 +123,7 @@ export const FileList = () => {
           </div>
         </div>
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-4">
-          {files.map((file: any) => (
+          {filteredFiles.map((file: any) => (
             <div key={file.name} className='border-2 border-green-400'>
               <File file={file} updateFiles={updateFiles} />
             </div>

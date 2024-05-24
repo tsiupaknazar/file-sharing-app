@@ -109,6 +109,17 @@ class FirebaseStorageService {
     );
   }
 
+  static async restoreAllFromTrash(userId: string | null) {
+    const trashRef = ref(storage, `${userId}/trash/`);
+    const trashFiles = await listAll(trashRef);
+
+    await Promise.all(
+      trashFiles.items.map(async (fileRef) => {
+        await this.restoreFromTrash(userId, fileRef);
+      })
+    );
+  }
+
   static async renameFile(userId: string | null, oldName: string, newName: string) {
     try {
       if (oldName === newName) {

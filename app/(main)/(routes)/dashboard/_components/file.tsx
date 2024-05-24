@@ -47,7 +47,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
   const { userId } = useAuth();
   const dialog = useDialog();
 
-  const [newName, setNewName] = useState<string>("");
+  const [newName, setNewName] = useState<string>(file.name.split(".")[0]);
 
   const handleDelete = async () => {
     try {
@@ -78,7 +78,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
     }
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value);
   };
 
@@ -143,7 +143,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
             <Input
               id="newname"
               value={newName}
-              onChange={handleChange}
+              onChange={handleNameChange}
               className="col-span-3"
             />
           </div>

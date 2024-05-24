@@ -10,6 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import Image from "next/image";
 
 
 const menuItems = [
@@ -57,12 +58,11 @@ const SideNav = () => {
     <TooltipProvider>
       <div
         className={wrapperClasses}
-        // onMouseEnter={onMouseOver}
-        // onMouseLeave={onMouseOver}
         style={{ transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s" }}
       >
         <div className="flex flex-col">
           <div className="flex items-center justify-between relative">
+            {!toggleCollapse && <Image src="/logofulldark.png" alt="Logo" width={180} height={180} />}
             {isCollapsible && (
               <button
                 className={collapseIconClasses}
