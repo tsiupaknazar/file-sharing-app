@@ -49,7 +49,7 @@ enum FileIcon {
     ZIP = '/ZIP.png',
 }
 
-const getFileExtension = (fileName: string): string | undefined => {
+export const getFileExtension = (fileName: string): string | undefined => {
     const dotIndex = fileName.lastIndexOf('.');
     if (dotIndex === -1 || dotIndex === fileName.length - 1) {
         return undefined;

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import FirebaseStorageService from "@/firebase/storageService";
 import { useAuth } from "@clerk/nextjs";
-import { FileViewModal, useDialog } from "@/components/modals/file-view-modal";
+import { FileViewModal } from "@/components/modals/file-view-modal";
 import {
   Dialog,
   DialogContent,
@@ -45,7 +45,8 @@ interface IFileComponentProps {
 
 export const File = ({ file, updateFiles }: IFileComponentProps) => {
   const { userId } = useAuth();
-  const dialog = useDialog();
+  const [isOpen, setIsOpen] = useState(false);
+  // const dialog = useDialog();
 
   const [newName, setNewName] = useState<string>(file.name.split(".")[0]);
 
@@ -82,20 +83,27 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
     setNewName(event.target.value);
   };
 
+  const handleViewFile = () => {
+    setIsOpen(true);
+  }
+
+  const closeDialog = () => {
+    setIsOpen(false);
+  };
+
   return (
     <Dialog>
       <div className="bg-accent w-full m-auto md:w-72 h-auto md:h-72 rounded-md hover:bg-gray-200 dark:bg-accent dark:hover:bg-[#3d3d3d] cursor-pointer">
         <div className="flex justify-between items-center px-4 h-10">
           <span className="whitespace-nowrap">
             {file.name.length > 15 ? file.name.slice(0, 15) + "..." : file.name}
-            {/* {file.downloadUrl} */}
           </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <MoreVertical />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              <DropdownMenuItem onClick={() => dialog.onOpen()}>
+              <DropdownMenuItem onClick={handleViewFile}>
                 <Info className="mr-2 h-4 w-4" />
                 <span>Info</span>
               </DropdownMenuItem>
@@ -152,6 +160,7 @@ export const File = ({ file, updateFiles }: IFileComponentProps) => {
           <Button type="submit" onClick={handleRename}>Save</Button>
         </DialogFooter>
       </DialogContent>
+      <FileViewModal isOpen={isOpen} onClose={closeDialog} fileInfo={file} />
     </Dialog>
   );
 };

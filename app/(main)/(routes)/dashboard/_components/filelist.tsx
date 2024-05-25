@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import EmptyPage from '@/components/empty-page';
 // import { parseDate } from '@/utils/parseDate';
 import useSearchStore from '@/store/searchStore';
+import { FoldersList } from './folders-list';
 
 export const FileList = () => {
   const { userId } = useAuth();
@@ -122,6 +123,7 @@ export const FileList = () => {
             </select>
           </div>
         </div>
+        <FoldersList />
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-4">
           {filteredFiles.map((file: any) => (
             <div key={file.name} className='border-2 border-green-400'>
