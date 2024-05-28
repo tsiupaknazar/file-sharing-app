@@ -21,7 +21,7 @@
 *.pem
 
 # notes file
-todo.txt
+todo.mdx
 
 # debug
 npm-debug.log*

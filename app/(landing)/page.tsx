@@ -14,7 +14,7 @@ import Link from "next/link";
 const AuthPage = () => {
     return (
         <>
-            <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
+            <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-10">
                 <p className="mr-6">
                     <Image src="/logofulldark.png" width={200} height={200} alt="Logo" />
                     <span className="sr-only">EasyShare</span>
@@ -54,8 +54,8 @@ const AuthPage = () => {
                                     sharing with friends and colleagues today.
                                 </p>
                             </div>
-                            <div className="w-full max-w-sm space-y-2">
-                                <Button type="button">Get Started</Button>
+                            <div className="max-w-full space-y-2">
+                                <Button type="button" className="w-[100%] sm:w-auto">Get Started</Button>
                             </div>
                         </div>
                     </div>
