@@ -1,6 +1,10 @@
+'use client';
+
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../ui/dialog"
 import FirebaseStorageService, { FileInfo } from "@/firebase/storageService";
 import { getFileExtension } from "@/utils/getExtensionIcon";
+import { useRef, useEffect } from "react";
+import VideoPlayer from "../video-player";
 
 interface FileViewModalProps {
     isOpen: boolean;
@@ -9,6 +13,29 @@ interface FileViewModalProps {
 }
 
 export const FileViewModal = ({ isOpen, onClose, fileInfo }: FileViewModalProps) => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
+    // useEffect(() => {
+    //     const container = containerRef.current;
+    //     let PSPDFKit;
+
+    //     async function loadPSPDFKit() {
+    //         PSPDFKit = await import("pspdfkit");
+    //         await PSPDFKit.load({
+    //             container,
+    //             document: `${fileInfo?.downloadUrl}`,
+    //             baseUrl: `${window.location.protocol}//${window.location.host}/`,
+    //         });
+    //     }
+
+    //     loadPSPDFKit();
+
+    //     return () => {
+    //         if (PSPDFKit) {
+    //             PSPDFKit.unload(container);
+    //         }
+    //     };
+    // }, [fileInfo?.downloadUrl]);
     const renderFileContent = () => {
         if (!fileInfo || !fileInfo.downloadUrl) {
             return <p>No file to display</p>;
@@ -21,22 +48,22 @@ export const FileViewModal = ({ isOpen, onClose, fileInfo }: FileViewModalProps)
             case 'jpeg':
             case 'png':
             case 'gif':
-                return <img src={fileInfo.downloadUrl} alt="file preview" className="w-full h-auto" />;
+                // return <iframe src={fileInfo.downloadUrl} className="w-full h-auto" />;
+                return "Work in progress..."
             case 'mp4':
             case 'webm':
             case 'ogg':
-                return (
-                    <video controls className="w-full h-auto">
-                        <source src={fileInfo.downloadUrl} />
-                        Your browser does not support the video tag.
-                    </video>
-                );
-            // case 'pdf':
-            //     return (
-            //         <Document file={fileInfo.downloadUrl}>
-            //             <Page pageNumber={1} />
-            //         </Document>
-            //     );
+                return <VideoPlayer videoSrc={fileInfo.downloadUrl} />;
+            case 'pdf':
+            case 'pptx':
+            case 'ppt':
+                // return <iframe
+                //     ref={containerRef}
+                //     src={fileInfo.downloadUrl}
+                //     className="w-full h-[80%]"
+                //     title={fileInfo.name}
+                // />
+                // return <div ref={containerRef} className="w-full h-[80%]"></div>
             default:
                 return <p>Unsupported file type</p>;
         }
@@ -44,16 +71,14 @@ export const FileViewModal = ({ isOpen, onClose, fileInfo }: FileViewModalProps)
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
-                <DialogHeader>
+                {/* <DialogHeader>
                     <DialogTitle>{fileInfo?.name}</DialogTitle>
                     <DialogDescription>
                         <p><strong>Type:</strong> {fileInfo?.type}</p>
                         <p><strong>Last modified:</strong> {fileInfo?.uploadTime}</p>
                     </DialogDescription>
-                </DialogHeader>
-                <div className="my-4">
-                    {renderFileContent()}
-                </div>
+                </DialogHeader> */}
+                {renderFileContent()}
             </DialogContent>
         </Dialog>
     )
